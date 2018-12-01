@@ -16,49 +16,45 @@
 const int count_rotaries = sizeof(rotaries);
 int counters[count_rotaries] = {0};*/
 
-Rotary rotary1 = Rotary(5, 6);
-int counter1 = 0;
+Rotary rotaries[] = {
+  Rotary(1, 2),
+  Rotary(3, 4),
+  Rotary(5, 6),
+};
 
-Rotary rotary2 = Rotary(3, 4);
-int counter2 = 0;
+const int count_rotaries = 3;
 
+int counters[count_rotaries] = {0};
+
+int startTime;
+int endTime;
 
 void setup() {
   Serial.begin(9600);
 }
 
 void loop() {
-  /*Serial.println("hey");
-  int i = 0;
+  //startTime = millis();
+  int i;
   for(i = 0; i < count_rotaries; i++) {
-    unsigned char result = rotaries[i].process();
+    int result = rotaries[i].process();
+    if (result == DIR_NONE) {
+      continue;
+    }
+
     if (result == DIR_CW) {
       counters[i]++;
-      Serial.println(String(i) + " " + String(counters[i]));
-    } else if (result == DIR_CCW) {
+    } else {
       counters[i]--;
-      Serial.println(String(i) + " " + String(counters[i]));
-    }  
-  }*/
-  
-  int result1 = rotary1.process();
-  if (result1 == DIR_CW) {
-      counter1++;
-      Serial.println("1 " + String(counter1));
-  } else if (result1 == DIR_CCW) {
-      counter1--;
-      Serial.println("1 " + String(counter1));
-  }  
+    }
+    
+    log(i);
+  }
+  //endTime = millis();
+  //Serial.println(endTime - startTime);
 
-  int result2 = rotary2.process();
-  //Serial.println(result2);
-  if (result2 == DIR_CW) {
-      counter2++;
-      Serial.println("2 " + String(counter2));
-  } else if (result2 == DIR_CCW) {
-      counter2--;
-      Serial.println("2 " + String(counter2));
-  }  
+}
 
-  
+void log(int i) {
+  Serial.println(String(i) + " " + String(counters[i]));
 }
