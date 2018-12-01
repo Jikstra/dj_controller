@@ -1,20 +1,10 @@
 #include <Rotary.h>
+#include <MIDI.h>
+#include <midi_Defs.h>
+#include <midi_Message.h>
+#include <midi_Namespace.h>
+#include <midi_Settings.h>
 
-/*
- * Example using the Rotary library, dumping integers to the serial
- * port. The integers increment or decrement depending on the direction
- * of rotation.
- *
- * This example uses polling rather than interrupts.
- */
-
-#include <Rotary.h>
-
-// Rotary encoder is wired with the common to ground and the two
-// outputs to pins 5 and 6.
-/*Rotary rotaries[] = {Rotary(5, 6), Rotary(1, 2)};
-const int count_rotaries = sizeof(rotaries);
-int counters[count_rotaries] = {0};*/
 
 Rotary rotaries[] = {
   Rotary(1, 2),
@@ -26,8 +16,11 @@ const int count_rotaries = 3;
 
 int counters[count_rotaries] = {0};
 
-int startTime;
-int endTime;
+//int startTime;
+//int endTime;
+
+MIDI_CREATE_INSTANCE(HardwareSerial,Serial, midiOut); // create a MIDI object called midiOut
+
 
 void setup() {
   Serial.begin(9600);
@@ -56,5 +49,5 @@ void loop() {
 }
 
 void log(int i) {
-  Serial.println(String(i) + " " + String(counters[i]));
+  midiOut.sendControlChange(i,counters[i],1); // send a MIDI CC -- 56 = note, 127 = velocity, 1 = channel
 }
