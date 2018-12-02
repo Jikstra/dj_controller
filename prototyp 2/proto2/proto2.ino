@@ -124,7 +124,6 @@ void knobProcessButton(Knob* knob) {
   }
 
   if(DEBUG == false) {
-    // TODO: Implement midi
     midiOut.sendNoteOn(knob->control_number, knob->button_is_pressed ? 127 : 0, knob->channel);
   } else {
     p("Button: %i:%i %s", knob->control_number, knob->channel, knob->button_is_pressed ? "Pressed" : "Released");
