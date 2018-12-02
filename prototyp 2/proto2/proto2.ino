@@ -7,7 +7,11 @@
 #include <stdarg.h>
 
 const bool DEBUG = true;
+const bool BENCHMARK = true;
 
+int BENCH_START_TIME = 0;
+int BENCH_TOTAL_TIME = 0;
+int BENCH_MAX_TOTAL = 0;
 
 struct Knob {
   int control_number;
@@ -26,14 +30,25 @@ struct Knob {
 };
 
 Knob knobs[] = {
-  {9, 10, 11, 1, 1},
-  {1, 2, 3, 2, 1},
+  { 9, 10, 11,  1, 1},
+  { 1,  2,  3,  2, 1},
+  { 4,  5,  6,  3, 1},
+  {12, 13, 14,  4, 1},
+  {15, 16, 17,  5, 1},
+  {18, 19, 20,  6, 1},
+  {21, 22, 23,  7, 1},
+  {24, 25, 26,  8, 1},
+  {26, 27, 28,  9, 1},
+  {29, 30, 31, 10, 1},
+  {32, 33, 34, 11, 1},
+  {35, 36, 37, 12, 1},
+  {38, 39, 40, 13, 1},
 };
 
-int count_knobs = 2;
+const int count_knobs = sizeof(knobs) / sizeof(Knob);
+//int count_knobs = 2;
 
-//int startTime;
-//int endTime;
+int max_time = 0;
 
 MIDI_CREATE_INSTANCE(HardwareSerial,Serial, midiOut); // create a MIDI object called midiOut
 
@@ -49,19 +64,27 @@ void setup() {
 }
 
 void loop() {
-  //startTime = millis();
+  if(BENCHMARK == true) {
+    BENCH_START_TIME = micros();
+  }
 
-  int i;
-  for(i = 0; i < count_knobs; i++) {
+  for(int i = 0; i < count_knobs; i++) {
     // Rotation
     Knob* knob = &knobs[i];
     
     knobProcessRotary(knob);
     knobProcessButton(knob);
   }
-  //endTime = millis();
-  //Serial.println(endTime - startTime);
 
+  if(BENCHMARK == true) {
+    BENCH_TOTAL_TIME = micros() - BENCH_START_TIME;
+    if(BENCH_TOTAL_TIME > BENCH_MAX_TOTAL) {
+      BENCH_MAX_TOTAL = BENCH_TOTAL_TIME;
+      p("Benchmark: %i micros", BENCH_MAX_TOTAL);
+    }  
+  }
+
+  delayMicroseconds(1000);
 }
 
 void knobProcessRotary(Knob* knob) {
