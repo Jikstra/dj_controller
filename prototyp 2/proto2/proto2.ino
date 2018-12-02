@@ -6,8 +6,8 @@
 #include <midi_Settings.h>
 #include <stdarg.h>
 
-const bool DEBUG = true;
-const bool BENCHMARK = true;
+const bool DEBUG = false;
+const bool BENCHMARK = false;
 
 int BENCH_START_TIME = 0;
 int BENCH_TOTAL_TIME = 0;
@@ -92,10 +92,12 @@ void knobProcessRotary(Knob* knob) {
 
   if (result == DIR_NONE) return;
 
-  if (result == DIR_CW) {
+  if (result == DIR_CCW && knob->rotary_counter < 127) {
     knob->rotary_counter++;
-  } else {
+  } else if(result == DIR_CW && knob->rotary_counter > 0)  {
     knob->rotary_counter--;
+  } else {
+    return;
   }
   
   if(DEBUG == false) {
@@ -122,7 +124,8 @@ void knobProcessButton(Knob* knob) {
   }
 
   if(DEBUG == false) {
-    // TODO: Implement midi 
+    // TODO: Implement midi
+    midiOut.sendNoteOn(knob->control_number, knob->button_is_pressed ? 127 : 0, knob->channel);
   } else {
     p("Button: %i:%i %s", knob->control_number, knob->channel, knob->button_is_pressed ? "Pressed" : "Released");
   }
