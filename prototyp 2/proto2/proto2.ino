@@ -17,32 +17,23 @@ struct Knob {
   int control_number;
   int channel;
   int button_pin;
+  int step_size;
   bool button_is_pressed;  
   Rotary rotary;
   int rotary_counter;
-  Knob(int rotary_pin_a, int rotary_pin_b, int button_pin, int control_number, int channel) : 
+  Knob(int rotary_pin_a, int button_pin, int rotary_pin_b, int control_number, int channel, int step_size) : 
     button_pin(button_pin),
     button_is_pressed(false),
     rotary(Rotary(rotary_pin_a, rotary_pin_b)),
     rotary_counter(0),
     control_number(control_number),
-    channel(channel) {}
+    channel(channel),
+    step_size(step_size) {}
 };
 
 Knob knobs[] = {
-  { 9, 10, 11,  1, 1},
-  { 1,  2,  3,  2, 1},
-  { 4,  5,  6,  3, 1},
-  {12, 13, 14,  4, 1},
-  {15, 16, 17,  5, 1},
-  {18, 19, 20,  6, 1},
-  {21, 22, 23,  7, 1},
-  {24, 25, 26,  8, 1},
-  {26, 27, 28,  9, 1},
-  {29, 30, 31, 10, 1},
-  {32, 33, 34, 11, 1},
-  {35, 36, 37, 12, 1},
-  {38, 39, 40, 13, 1},
+  { 1,  2,  3,  2, 1, 4},
+  { 4,  5,  6,  3, 1, 4},
 };
 
 const int count_knobs = sizeof(knobs) / sizeof(Knob);
@@ -54,7 +45,7 @@ MIDI_CREATE_INSTANCE(HardwareSerial,Serial, midiOut); // create a MIDI object ca
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   for(int i = 0; i < count_knobs; i++) {
     Knob* knob = &knobs[i];
     
@@ -93,22 +84,29 @@ void knobProcessRotary(Knob* knob) {
   if (result == DIR_NONE) return;
 
   if (result == DIR_CCW && knob->rotary_counter < 127) {
-    knob->rotary_counter++;
+    knob->rotary_counter = knob->rotary_counter + knob->step_size;
   } else if(result == DIR_CW && knob->rotary_counter > 0)  {
-    knob->rotary_counter--;
+    knob->rotary_counter = knob->rotary_counter - knob->step_size;
   } else {
     return;
+  }
+
+  int value_to_send = knob->rotary_counter;
+  if(value_to_send > 127) {
+    value_to_send = 127;
+  } else if(value_to_send < 0) {
+    value_to_send = 0;
   }
   
   if(DEBUG == false) {
     // send a MIDI CC -- 56 = note, 127 = velocity, 1 = channel
     midiOut.sendControlChange(
       knob->control_number,
-      knob->rotary_counter,
+      value_to_send,
       knob->channel
     );
   } else {
-    p("Rotation: %i:%i %i", knob->control_number, knob->channel, knob->rotary_counter);  
+    p("Rotation: %i:%i %i", knob->control_number, knob->channel, value_to_send);  
   }
 }
 
