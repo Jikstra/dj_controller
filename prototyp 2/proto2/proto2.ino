@@ -7,7 +7,7 @@
 #include <stdarg.h>
 
 const bool DEBUG = true;
-const bool BENCHMARK = false;
+const bool BENCHMARK = true;
 
 int BENCH_START_TIME = 0;
 int BENCH_TOTAL_TIME = 0;
@@ -40,12 +40,14 @@ struct TwoWaySwitch {
   int control_number;
   int channel;
   int pin;
+  unsigned long last_flake;
   bool switch_is_up;
   bool switch_was_up;
   TwoWaySwitch(int pin, int control_number, int channel) :
     pin(pin),
     control_number(control_number),
     channel(channel),
+    last_flake(0),
     switch_is_up(false),
     switch_was_up(false) {}
   
@@ -116,7 +118,9 @@ void knobProcessButton(Knob* knob) {
   } else {
     return;
   }*/
+  
   if(button == LOW && knob->button_was_pressed == false) {
+    
     knob->button_is_pressed = !knob->button_is_pressed;
     knob->button_was_pressed = true;
   } else if(button == HIGH && knob->button_was_pressed == true){
@@ -158,10 +162,16 @@ int _knobGetValueToSend(Knob* knob) {
   int state = digitalRead(twoWaySwitch->pin);
   
   if(state == LOW && twoWaySwitch->switch_was_up == false) {
+    unsigned long current_flake = millis();
+    if(current_flake - twoWaySwitch->last_flake < 50) return;
     twoWaySwitch->switch_is_up = !twoWaySwitch->switch_is_up;
     twoWaySwitch->switch_was_up = true;
+    twoWaySwitch->last_flake = current_flake;
   } else if(state == HIGH && twoWaySwitch->switch_was_up == true){
+    unsigned long current_flake = millis();
+    if(current_flake - twoWaySwitch->last_flake < 50) return;
     twoWaySwitch->switch_was_up = false;
+    twoWaySwitch->last_flake = current_flake;
     return;
   } else {
     return;
