@@ -6,7 +6,7 @@
 #include <midi_Settings.h>
 #include <stdarg.h>
 
-const bool DEBUG = false;
+const bool DEBUG = true;
 const bool BENCHMARK = false;
 
 int BENCH_START_TIME = 0;
@@ -36,51 +36,47 @@ struct Knob {
     step_size(step_size) {}
 };
 
+struct TwoWaySwitch {
+  int control_number;
+  int channel;
+  int pin;
+  bool switch_is_up;
+  bool switch_was_up;
+  TwoWaySwitch(int pin, int control_number, int channel) :
+    pin(pin),
+    control_number(control_number),
+    channel(channel),
+    switch_is_up(false),
+    switch_was_up(false) {}
+  
+};
+
 Knob knobs[] = {
   { 1,  2,  3,  1, 2, 1, 4 },
   { 4,  5,  6,  3, 4, 1, 4 },
 };
 
+
 const int count_knobs = sizeof(knobs) / sizeof(Knob);
 //int count_knobs = 2;
+
+
+TwoWaySwitch two_way_switches[] = {
+  { 22, 10, 1 }
+};
+
+const int count_two_way_switches = sizeof(two_way_switches) / sizeof(TwoWaySwitch);
 
 int max_time = 0;
 
 MIDI_CREATE_INSTANCE(HardwareSerial,Serial, midiOut); // create a MIDI object called midiOut
 
+/*************
+ *  Knob
+ *************/
 
-void setup() {
-  Serial.begin(115200);
-  for(int i = 0; i < count_knobs; i++) {
-    Knob* knob = &knobs[i];
-    
-    pinMode(knob->button_pin, INPUT_PULLUP);
-  }
-  
-}
-
-void loop() {
-  if(BENCHMARK == true) {
-    BENCH_START_TIME = micros();
-  }
-
-  for(int i = 0; i < count_knobs; i++) {
-    // Rotation
-    Knob* knob = &knobs[i];
-    
-    knobProcessRotary(knob);
-    knobProcessButton(knob);
-  }
-
-  if(BENCHMARK == true) {
-    BENCH_TOTAL_TIME = micros() - BENCH_START_TIME;
-    if(BENCH_TOTAL_TIME > BENCH_MAX_TOTAL) {
-      BENCH_MAX_TOTAL = BENCH_TOTAL_TIME;
-      p("Benchmark: %i micros", BENCH_MAX_TOTAL);
-    }  
-  }
-
-  delayMicroseconds(1000);
+void knobSetup(Knob* knob) {
+   pinMode(knob->button_pin, INPUT_PULLUP);
 }
 
 void knobProcessRotary(Knob* knob) {
@@ -149,6 +145,43 @@ int _knobGetValueToSend(Knob* knob) {
   return value_to_send;  
 }
 
+
+/*************
+ * TwoWaySwitch
+ *************/
+
+ void twoWaySwitchSetup(TwoWaySwitch* twoWaySwitch) {
+   pinMode(twoWaySwitch->pin, INPUT_PULLUP);
+ }
+
+ void twoWaySwitchProcess(TwoWaySwitch* twoWaySwitch) {
+  int state = digitalRead(twoWaySwitch->pin);
+  
+  if(state == LOW && twoWaySwitch->switch_was_up == false) {
+    twoWaySwitch->switch_is_up = !twoWaySwitch->switch_is_up;
+    twoWaySwitch->switch_was_up = true;
+  } else if(state == HIGH && twoWaySwitch->switch_was_up == true){
+    twoWaySwitch->switch_was_up = false;
+    return;
+  } else {
+    return;
+  }
+
+  int value_to_send = twoWaySwitch->switch_is_up ? 1 : 0;
+
+  if(DEBUG == false) {
+    midiOut.sendNoteOn(twoWaySwitch->control_number, value_to_send, twoWaySwitch->channel);
+  } else {
+    p("TwoWaySwitch: %i:%i %s %i", twoWaySwitch->control_number, twoWaySwitch->channel, value_to_send ? "Up" : "Down", value_to_send);
+  }
+}
+
+
+/*************
+ * COMMON
+ *************/
+ 
+
 void p(char *fmt, ... ){
   char buf[128]; // resulting string limited to 128 chars
   va_list args;
@@ -156,4 +189,44 @@ void p(char *fmt, ... ){
   vsnprintf(buf, 128, fmt, args);
   va_end (args);
   Serial.println(buf);
+}
+
+void setup() {
+  Serial.begin(115200);
+  for(int i = 0; i < count_knobs; i++) {
+    knobSetup(&knobs[i]);
+  }
+
+  for(int i = 0; i < count_two_way_switches; i++) {
+    twoWaySwitchSetup(&two_way_switches[i]);
+  }
+  
+}
+
+void loop() {
+  if(BENCHMARK == true) {
+    BENCH_START_TIME = micros();
+  }
+
+  for(int i = 0; i < count_knobs; i++) {
+    // Rotation
+    Knob* knob = &knobs[i];
+    
+    knobProcessRotary(knob);
+    knobProcessButton(knob);
+  }
+
+  for(int i = 0; i < count_two_way_switches; i++) {
+    twoWaySwitchProcess(&two_way_switches[i]);
+  }
+
+  if(BENCHMARK == true) {
+    BENCH_TOTAL_TIME = micros() - BENCH_START_TIME;
+    if(BENCH_TOTAL_TIME > BENCH_MAX_TOTAL) {
+      BENCH_MAX_TOTAL = BENCH_TOTAL_TIME;
+      p("Benchmark: %i micros", BENCH_MAX_TOTAL);
+    }  
+  }
+
+  delayMicroseconds(1000);
 }
