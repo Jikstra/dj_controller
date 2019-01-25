@@ -14,26 +14,31 @@ int BENCH_TOTAL_TIME = 0;
 int BENCH_MAX_TOTAL = 0;
 
 struct Knob {
-  int control_number;
+  int control_number_value;
+  int control_number_mute;
+  
   int channel;
   int button_pin;
   int step_size;
-  bool button_is_pressed;  
+  bool button_is_pressed;
+  bool button_was_pressed;
   Rotary rotary;
   int rotary_counter;
-  Knob(int rotary_pin_a, int button_pin, int rotary_pin_b, int control_number, int channel, int step_size) : 
+  Knob(int rotary_pin_a, int button_pin, int rotary_pin_b, int control_number_value, int control_number_mute, int channel, int step_size) : 
     button_pin(button_pin),
     button_is_pressed(false),
+    button_was_pressed(false),
     rotary(Rotary(rotary_pin_a, rotary_pin_b)),
     rotary_counter(0),
-    control_number(control_number),
+    control_number_value(control_number_value),
+    control_number_mute(control_number_mute),
     channel(channel),
     step_size(step_size) {}
 };
 
 Knob knobs[] = {
-  { 1,  2,  3,  2, 1, 4},
-  { 4,  5,  6,  3, 1, 4},
+  { 1,  2,  3,  1, 2, 1, 4 },
+  { 4,  5,  6,  3, 4, 1, 4 },
 };
 
 const int count_knobs = sizeof(knobs) / sizeof(Knob);
@@ -91,43 +96,58 @@ void knobProcessRotary(Knob* knob) {
     return;
   }
 
-  int value_to_send = knob->rotary_counter;
-  if(value_to_send > 127) {
-    value_to_send = 127;
-  } else if(value_to_send < 0) {
-    value_to_send = 0;
-  }
+  int value_to_send = _knobGetValueToSend(knob);
   
   if(DEBUG == false) {
     // send a MIDI CC -- 56 = note, 127 = velocity, 1 = channel
     midiOut.sendControlChange(
-      knob->control_number,
+      knob->control_number_value,
       value_to_send,
       knob->channel
     );
   } else {
-    p("Rotation: %i:%i %i", knob->control_number, knob->channel, value_to_send);  
+    p("Rotation: %i:%i %i", knob->control_number_value, knob->channel, value_to_send);  
   }
 }
 
 void knobProcessButton(Knob* knob) {
   int button = digitalRead(knob->button_pin);
   
-  if(button == LOW && knob->button_is_pressed == false) {
+  /*if(button == LOW && knob->button_is_pressed == false) {
     knob->button_is_pressed = true;
   } else if(button == HIGH && knob->button_is_pressed == true) {
     knob->button_is_pressed = false;
   } else {
     return;
+  }*/
+  if(button == LOW && knob->button_was_pressed == false) {
+    knob->button_is_pressed = !knob->button_is_pressed;
+    knob->button_was_pressed = true;
+  } else if(button == HIGH && knob->button_was_pressed == true){
+    knob->button_was_pressed = false;
+    return;
+  } else {
+    return;
   }
+  
+  int value_to_send = knob->button_is_pressed ? 0 : 1;
 
   if(DEBUG == false) {
-    midiOut.sendNoteOn(knob->control_number, knob->button_is_pressed ? 127 : 0, knob->channel);
+    midiOut.sendNoteOn(knob->control_number_mute, value_to_send, knob->channel);
   } else {
-    p("Button: %i:%i %s", knob->control_number, knob->channel, knob->button_is_pressed ? "Pressed" : "Released");
+    p("Button: %i:%i %s %i", knob->control_number_mute, knob->channel, knob->button_is_pressed ? "Pressed" : "Released", value_to_send);
   }
 }
 
+int _knobGetValueToSend(Knob* knob) {
+  int value_to_send = knob->rotary_counter;
+  if(value_to_send > 127) {
+    value_to_send = 127;
+  } else if(value_to_send < 0) {
+    value_to_send = 0;
+  }
+  return value_to_send;  
+}
 
 void p(char *fmt, ... ){
   char buf[128]; // resulting string limited to 128 chars
