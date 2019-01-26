@@ -6,8 +6,8 @@
 #include <midi_Settings.h>
 #include <stdarg.h>
 
-const bool DEBUG = true;
-const bool BENCHMARK = true;
+const bool DEBUG = false;
+const bool BENCHMARK = false;
 
 int BENCH_START_TIME = 0;
 int BENCH_TOTAL_TIME = 0;
@@ -36,14 +36,14 @@ struct Knob {
     step_size(step_size) {}
 };
 
-struct TwoWaySwitch {
+struct Button {
   int control_number;
   int channel;
   int pin;
   unsigned long last_flake;
   bool switch_is_up;
   bool switch_was_up;
-  TwoWaySwitch(int pin, int control_number, int channel) :
+  Button(int pin, int control_number, int channel) :
     pin(pin),
     control_number(control_number),
     channel(channel),
@@ -54,8 +54,12 @@ struct TwoWaySwitch {
 };
 
 Knob knobs[] = {
-  { 1,  2,  3,  1, 2, 1, 4 },
-  { 4,  5,  6,  3, 4, 1, 4 },
+  {  2,  3,  4,  1,  2, 1, 4 },
+  {  5,  6,  7,  3,  4, 1, 4 },
+  {  8,  9, 10,  5,  6, 1, 4 },
+  { 11, 12, 13,  7,  8, 1, 4 },
+  { A0, A1, A2,  9, 10, 1, 4 },
+  { A3, A4, A5, 11, 12, 1, 4 },
 };
 
 
@@ -63,11 +67,13 @@ const int count_knobs = sizeof(knobs) / sizeof(Knob);
 //int count_knobs = 2;
 
 
-TwoWaySwitch two_way_switches[] = {
-  { 22, 10, 1 }
+Button buttons[] = {
+  { A6, 50, 1 },
+  { A7, 51, 1 },
+  { A8, 51, 1 },
 };
 
-const int count_two_way_switches = sizeof(two_way_switches) / sizeof(TwoWaySwitch);
+const int count_buttons = sizeof(buttons) / sizeof(Button);
 
 int max_time = 0;
 
@@ -151,38 +157,38 @@ int _knobGetValueToSend(Knob* knob) {
 
 
 /*************
- * TwoWaySwitch
+ * Button
  *************/
 
- void twoWaySwitchSetup(TwoWaySwitch* twoWaySwitch) {
-   pinMode(twoWaySwitch->pin, INPUT_PULLUP);
+ void buttonSetup(Button* button) {
+   pinMode(button->pin, INPUT_PULLUP);
  }
 
- void twoWaySwitchProcess(TwoWaySwitch* twoWaySwitch) {
-  int state = digitalRead(twoWaySwitch->pin);
+ void buttonProcess(Button* button) {
+  int state = digitalRead(button->pin);
   
-  if(state == LOW && twoWaySwitch->switch_was_up == false) {
+  if(state == LOW && button->switch_was_up == false) {
     unsigned long current_flake = millis();
-    if(current_flake - twoWaySwitch->last_flake < 50) return;
-    twoWaySwitch->switch_is_up = !twoWaySwitch->switch_is_up;
-    twoWaySwitch->switch_was_up = true;
-    twoWaySwitch->last_flake = current_flake;
-  } else if(state == HIGH && twoWaySwitch->switch_was_up == true){
+    if(current_flake - button->last_flake < 50) return;
+    button->switch_is_up = !button->switch_is_up;
+    button->switch_was_up = true;
+    button->last_flake = current_flake;
+  } else if(state == HIGH && button->switch_was_up == true){
     unsigned long current_flake = millis();
-    if(current_flake - twoWaySwitch->last_flake < 50) return;
-    twoWaySwitch->switch_was_up = false;
-    twoWaySwitch->last_flake = current_flake;
+    if(current_flake - button->last_flake < 50) return;
+    button->switch_was_up = false;
+    button->last_flake = current_flake;
     return;
   } else {
     return;
   }
 
-  int value_to_send = twoWaySwitch->switch_is_up ? 1 : 0;
+  int value_to_send = button->switch_is_up ? 1 : 0;
 
   if(DEBUG == false) {
-    midiOut.sendNoteOn(twoWaySwitch->control_number, value_to_send, twoWaySwitch->channel);
+    midiOut.sendNoteOn(button->control_number, value_to_send, button->channel);
   } else {
-    p("TwoWaySwitch: %i:%i %s %i", twoWaySwitch->control_number, twoWaySwitch->channel, value_to_send ? "Up" : "Down", value_to_send);
+    p("Button: %i:%i %s %i", button->control_number, button->channel, value_to_send ? "Up" : "Down", value_to_send);
   }
 }
 
@@ -207,8 +213,8 @@ void setup() {
     knobSetup(&knobs[i]);
   }
 
-  for(int i = 0; i < count_two_way_switches; i++) {
-    twoWaySwitchSetup(&two_way_switches[i]);
+  for(int i = 0; i < count_buttons; i++) {
+    buttonSetup(&buttons[i]);
   }
   
 }
@@ -226,8 +232,8 @@ void loop() {
     knobProcessButton(knob);
   }
 
-  for(int i = 0; i < count_two_way_switches; i++) {
-    twoWaySwitchProcess(&two_way_switches[i]);
+  for(int i = 0; i < count_buttons; i++) {
+    buttonProcess(&buttons[i]);
   }
 
   if(BENCHMARK == true) {
