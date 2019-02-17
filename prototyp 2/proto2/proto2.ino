@@ -6,12 +6,18 @@
 #include <midi_Settings.h>
 #include <stdarg.h>
 
-const bool DEBUG = false;
+const bool DEBUG = true;
 const bool BENCHMARK = false;
 
 int BENCH_START_TIME = 0;
 int BENCH_TOTAL_TIME = 0;
 int BENCH_MAX_TOTAL = 0;
+
+const bool DECK_A = 0;
+const bool DECK_B = 1;
+
+int channel_deck_a = 1;
+int channel_deck_b = 2;
 
 struct Knob {
   int control_number_value;
@@ -38,20 +44,24 @@ struct Knob {
 
 struct Button {
   int control_number;
-  int channel;
+  const bool deck;
   int pin;
   unsigned long last_flake;
   bool switch_is_up;
   bool switch_was_up;
-  Button(int pin, int control_number, int channel) :
+  Button(int pin, int control_number, bool deck) :
     pin(pin),
     control_number(control_number),
-    channel(channel),
+    deck(deck),
     last_flake(0),
     switch_is_up(false),
     switch_was_up(false) {}
   
 };
+
+/*************
+ * START PIN LAYOUT
+ *************/
 
 Knob knobs[] = {
   {  2,  3,  4,  1,  2, 1, 4 },
@@ -70,14 +80,10 @@ const int count_knobs = sizeof(knobs) / sizeof(Knob);
 //int count_knobs = 2;
 
 
-Button buttons[] = {
-  { 40, 50, 1 },
-  { 41, 51, 1 },
-  { 42, 52, 1 },
-  { 43, 53, 1 },
-};
 
-const int count_buttons = sizeof(buttons) / sizeof(Button);
+/*************
+ * END PIN LAYOUT
+ *************/
 
 int max_time = 0;
 
@@ -164,13 +170,16 @@ int _knobGetValueToSend(Knob* knob) {
  * Button
  *************/
 
- void buttonSetup(Button* button) {
+void buttonSetup(Button* button) {
    pinMode(button->pin, INPUT_PULLUP);
  }
 
- void buttonProcess(Button* button) {
+void buttonProcess(Button* button) {
   int state = digitalRead(button->pin);
-  
+  _buttonProcess(button, state);
+}
+
+void _buttonProcess(Button* button, int state) {
   if(state == LOW && button->switch_was_up == false) {
     unsigned long current_flake = millis();
     if(current_flake - button->last_flake < 50) return;
@@ -188,19 +197,128 @@ int _knobGetValueToSend(Knob* knob) {
   }
 
   int value_to_send = 1;
+  int channel = getChannelFromDeck(button->deck);
 
   if(DEBUG == false) {
-    midiOut.sendNoteOn(button->control_number, value_to_send, button->channel);
+    midiOut.sendNoteOn(button->control_number, value_to_send, channel);
   } else {
-    p("Button: %i:%i %s %i", button->control_number, button->channel, value_to_send ? "Up" : "Down", value_to_send);
+    p("Button: %i:%i %s %i", button->control_number, channel, value_to_send ? "Up" : "Down", value_to_send);
   }
 }
 
 
+/************
+ * MATRIX
+ ************/
+
+int matrix_col_a = 4;
+int matrix_col_b = 5;
+
+Button matrix_buttons_col_a[] = {
+  { 8, 50, DECK_A },
+  { 9, 51, DECK_A },
+  { 10, 52, DECK_A },
+  { 11, 53, DECK_A },
+  { 12, 54, DECK_A },
+  { 13, 55, DECK_A },
+};
+
+const int count_matrix_buttons_col_a = sizeof(matrix_buttons_col_a) / sizeof(Button);
+
+
+Button matrix_buttons_col_b[] = {
+  { 8, 50, DECK_B },
+  { 9, 51, DECK_B },
+  { 10, 52, DECK_B },
+  { 11, 53, DECK_B },
+  { 12, 54, DECK_B },
+  { 13, 55, DECK_B },
+};
+
+const int count_matrix_buttons_col_b = sizeof(matrix_buttons_col_b) / sizeof(Button);
+
+
+void setupMatrix() {
+  _setupMatrixCol(matrix_col_a);
+  _setupMatrixCol(matrix_col_b);
+  
+  for(int i=0; i<count_matrix_buttons_col_a; i++) {
+    Button* curRowButton = &matrix_buttons_col_a[i];
+    _setupMatrixRow(curRowButton->pin);
+  }
+  
+  // put your setup code here, to run once:
+  for(int i=0; i<count_matrix_buttons_col_b; i++) {
+    Button* curRowButton = &matrix_buttons_col_b[i];
+    _setupMatrixRow(curRowButton->pin);
+  }
+}
+
+void _setupMatrixCol(int pin) {
+  pinMode(pin, INPUT_PULLUP);
+}
+
+void _setupMatrixRow(int pin) {
+  pinMode(pin, INPUT);  
+}
+
+int _matrixRead(int curRow) {
+  pinMode(curRow, INPUT_PULLUP);
+  int val = !digitalRead(curRow);
+  pinMode(curRow, INPUT);
+  return val;  
+}
+
+void _matrixStartCol(int pin) {
+  pinMode(pin, OUTPUT);
+  digitalWrite(pin, LOW);  
+}
+
+void _matrixEndCol(int pin) {
+  pinMode(pin, INPUT);  
+}
+
+
+void loopMatrixCol() {
+  int curCol = matrix_col_a;
+  
+  _matrixStartCol(curCol);
+
+  loopMatrixButtons(matrix_buttons_col_a, count_matrix_buttons_col_a);
+
+  _matrixEndCol(curCol);
+
+  curCol = matrix_col_b;
+  _matrixStartCol(curCol);
+
+  loopMatrixButtons(matrix_buttons_col_b, count_matrix_buttons_col_b);
+
+  _matrixEndCol(curCol);
+
+}
+
+void loopMatrixButtons(Button buttons[], int count) {
+  for(int i=0; i<count; i++) {
+    Button* curButton = &buttons[i];
+
+    int curButtonState = _matrixRead(curButton->pin);
+
+    _buttonProcess(curButton, curButtonState);
+  }  
+}
+
 /*************
  * COMMON
  *************/
- 
+
+
+int getChannelFromDeck(bool deck) {
+  if(deck == DECK_A) {
+    return channel_deck_a;
+  } else {
+    return channel_deck_b;
+  }
+}
 
 void p(char *fmt, ... ){
   char buf[128]; // resulting string limited to 128 chars
@@ -213,13 +331,11 @@ void p(char *fmt, ... ){
 
 void setup() {
   Serial.begin(115200);
-  for(int i = 0; i < count_knobs; i++) {
+  /*for(int i = 0; i < count_knobs; i++) {
     knobSetup(&knobs[i]);
-  }
+  }*/
 
-  for(int i = 0; i < count_buttons; i++) {
-    buttonSetup(&buttons[i]);
-  }
+  setupMatrix();
   
 }
 
@@ -228,17 +344,15 @@ void loop() {
     BENCH_START_TIME = micros();
   }
 
-  for(int i = 0; i < count_knobs; i++) {
+  /*for(int i = 0; i < count_knobs; i++) {
     // Rotation
     Knob* knob = &knobs[i];
     
     knobProcessRotary(knob);
     knobProcessButton(knob);
-  }
+  }*/
 
-  for(int i = 0; i < count_buttons; i++) {
-    buttonProcess(&buttons[i]);
-  }
+  loopMatrixCol();
 
   if(BENCHMARK == true) {
     BENCH_TOTAL_TIME = micros() - BENCH_START_TIME;
