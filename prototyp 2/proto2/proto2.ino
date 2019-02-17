@@ -60,6 +60,9 @@ Knob knobs[] = {
   { 11, 12, 13,  7,  8, 1, 4 },
   { A0, A1, A2,  9, 10, 1, 4 },
   { A3, A4, A5, 11, 12, 1, 4 },
+  { A8, A9, A10, 13, 14, 1, 4 },
+  { A11, A12, A13, 15, 16, 1, 4 },
+  { 22, 24, 26, 17, 18, 1, 4}
 };
 
 
@@ -68,9 +71,10 @@ const int count_knobs = sizeof(knobs) / sizeof(Knob);
 
 
 Button buttons[] = {
-  { A6, 50, 1 },
-  { A7, 51, 1 },
-  { A8, 51, 1 },
+  { 40, 50, 1 },
+  { 41, 51, 1 },
+  { 42, 52, 1 },
+  { 43, 53, 1 },
 };
 
 const int count_buttons = sizeof(buttons) / sizeof(Button);
@@ -183,7 +187,7 @@ int _knobGetValueToSend(Knob* knob) {
     return;
   }
 
-  int value_to_send = button->switch_is_up ? 1 : 0;
+  int value_to_send = 1;
 
   if(DEBUG == false) {
     midiOut.sendNoteOn(button->control_number, value_to_send, button->channel);
