@@ -6,7 +6,7 @@
 #include <midi_Settings.h>
 #include <stdarg.h>
 
-const bool DEBUG = false;
+const bool DEBUG = true;
 const bool BENCHMARK = false;
 
 int BENCH_START_TIME = 0;
@@ -54,10 +54,11 @@ struct Button {
     control_number(control_number),
     deck(deck),
     last_flake(0),
-    switch_is_up(false),
-    switch_was_up(false) {}
+    switch_is_up(true),
+    switch_was_up(true) {}
   
 };
+
 
 /*************
  * START PIN LAYOUT
