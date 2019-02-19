@@ -6,7 +6,7 @@
 #include <midi_Settings.h>
 #include <stdarg.h>
 
-const bool DEBUG = true;
+const bool DEBUG = false;
 const bool BENCHMARK = false;
 
 int BENCH_START_TIME = 0;
@@ -64,15 +64,30 @@ struct Button {
  *************/
 
 Knob knobs[] = {
-  {  2,  3,  4,  1,  2, 1, 4 },
-  {  5,  6,  7,  3,  4, 1, 4 },
-  {  8,  9, 10,  5,  6, 1, 4 },
-  { 11, 12, 13,  7,  8, 1, 4 },
-  { A0, A1, A2,  9, 10, 1, 4 },
-  { A3, A4, A5, 11, 12, 1, 4 },
-  { A8, A9, A10, 13, 14, 1, 4 },
+  // DECK A
+  {   2,   3,   4,  1,  2, 1, 4 },
+  {   5,   6,   7,  3,  4, 1, 4 },
+  {   8,   9,  10,  5,  6, 1, 4 },
+  {  11,  12,  13,  7,  8, 1, 4 },
+  {  A0,  A1,  A2,  9, 10, 1, 4 },
+  {  A3,  A4,  A5, 11, 12, 1, 4 },
+  {  A8,  A9, A10, 13, 14, 1, 4 },
   { A11, A12, A13, 15, 16, 1, 4 },
-  { 22, 24, 26, 17, 18, 1, 4}
+  {  14,  15,  16, 17, 18, 1, 4 },
+  {  17,  18,  19, 19, 20, 1, 4 },
+  
+  // DECK B
+  {  22,  24,  26,  1,  2, 2, 4 },
+  {  23,  25,  27,  3,  4, 2, 4 },
+  {  28,  30,  32,  5,  6, 2, 4 },
+  {  29,  31,  33,  7,  8, 2, 4 },
+  {  34,  36,  38,  9, 10, 2, 4 },
+  {  35,  37,  39, 11, 12, 2, 4 },
+  {  40,  42,  44, 13, 14, 2, 4 },
+  {  41,  43,  45, 15, 16, 2, 4 },
+  {  46,  48,  50, 17, 18, 2, 4 },
+  {  47,  49,  51, 19, 20, 2, 4 }
+
 };
 
 
@@ -211,28 +226,24 @@ void _buttonProcess(Button* button, int state) {
  * MATRIX
  ************/
 
-int matrix_col_a = 4;
-int matrix_col_b = 5;
+int matrix_col_a = A6;
+int matrix_col_b = A7;
 
 Button matrix_buttons_col_a[] = {
-  { 8, 50, DECK_A },
-  { 9, 51, DECK_A },
-  { 10, 52, DECK_A },
-  { 11, 53, DECK_A },
-  { 12, 54, DECK_A },
-  { 13, 55, DECK_A },
+  { 20, 50, DECK_A },
+  { 21, 51, DECK_A },
+  { 52, 52, DECK_A },
+  { 53, 53, DECK_A },
 };
 
 const int count_matrix_buttons_col_a = sizeof(matrix_buttons_col_a) / sizeof(Button);
 
 
 Button matrix_buttons_col_b[] = {
-  { 8, 50, DECK_B },
-  { 9, 51, DECK_B },
-  { 10, 52, DECK_B },
-  { 11, 53, DECK_B },
-  { 12, 54, DECK_B },
-  { 13, 55, DECK_B },
+  { 20, 50, DECK_B },
+  { 21, 51, DECK_B },
+  { 52,  52, DECK_B },
+  { 53,  53, DECK_B }
 };
 
 const int count_matrix_buttons_col_b = sizeof(matrix_buttons_col_b) / sizeof(Button);
@@ -331,9 +342,9 @@ void p(char *fmt, ... ){
 
 void setup() {
   Serial.begin(115200);
-  /*for(int i = 0; i < count_knobs; i++) {
+  for(int i = 0; i < count_knobs; i++) {
     knobSetup(&knobs[i]);
-  }*/
+  }
 
   setupMatrix();
   
@@ -344,13 +355,13 @@ void loop() {
     BENCH_START_TIME = micros();
   }
 
-  /*for(int i = 0; i < count_knobs; i++) {
+  for(int i = 0; i < count_knobs; i++) {
     // Rotation
     Knob* knob = &knobs[i];
     
     knobProcessRotary(knob);
     knobProcessButton(knob);
-  }*/
+  }
 
   loopMatrixCol();
 
