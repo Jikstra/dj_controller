@@ -6,7 +6,7 @@
 #include <midi_Settings.h>
 #include <stdarg.h>
 
-const bool DEBUG = true;
+const bool DEBUG = false;
 const bool BENCHMARK = false;
 
 int BENCH_START_TIME = 0;
@@ -23,14 +23,14 @@ struct Knob {
   int control_number_value;
   int control_number_mute;
   
-  int channel;
+  bool deck;
   int button_pin;
   int step_size;
   bool button_is_pressed;
   bool button_was_pressed;
   Rotary rotary;
   int rotary_counter;
-  Knob(int rotary_pin_a, int button_pin, int rotary_pin_b, int control_number_value, int control_number_mute, int channel, int step_size) : 
+  Knob(int rotary_pin_a, int button_pin, int rotary_pin_b, int control_number_value, int control_number_mute, bool deck, int step_size) : 
     button_pin(button_pin),
     button_is_pressed(false),
     button_was_pressed(false),
@@ -38,7 +38,7 @@ struct Knob {
     rotary_counter(0),
     control_number_value(control_number_value),
     control_number_mute(control_number_mute),
-    channel(channel),
+    deck(deck),
     step_size(step_size) {}
 };
 
@@ -60,34 +60,54 @@ struct Button {
 };
 
 
+struct PositionLoopKnob {
+  int control_number_left;
+  int control_number_right;
+  int control_number_press;
+  int control_number_release;
+  
+  bool deck ;
+  int button_pin;
+  bool button_is_pressed;
+  bool button_was_pressed;
+  Rotary rotary;
+  int rotary_counter;
+  PositionLoopKnob(int rotary_pin_a, int button_pin, int rotary_pin_b, int control_number_left, int control_number_right, int control_number_press, int control_number_release, bool deck) : 
+    button_pin(button_pin),
+    button_is_pressed(false),
+    button_was_pressed(false),
+    rotary(Rotary(rotary_pin_a, rotary_pin_b)),
+    control_number_left(control_number_left),
+    control_number_right(control_number_right),
+    control_number_press(control_number_press),
+    control_number_release(control_number_release),
+    deck(deck) {}
+};
+
 /*************
  * START PIN LAYOUT
  *************/
 
 Knob knobs[] = {
   // DECK A
-  {   2,   3,   4,  1,  2, 1, 4 },
-  {   5,   6,   7,  3,  4, 1, 4 },
-  {   8,   9,  10,  5,  6, 1, 4 },
-  {  11,  12,  13,  7,  8, 1, 4 },
-  {  A0,  A1,  A2,  9, 10, 1, 4 },
-  {  A3,  A4,  A5, 11, 12, 1, 4 },
-  {  A8,  A9, A10, 13, 14, 1, 4 },
-  { A11, A12, A13, 15, 16, 1, 4 },
-  {  14,  15,  16, 17, 18, 1, 4 },
-  {  17,  18,  19, 19, 20, 1, 4 },
+  {   8,   9,  10,  5,  6, DECK_A, 4 },
+  {  11,  12,  13,  7,  8, DECK_A, 4 },
+  {  A0,  A1,  A2,  9, 10, DECK_A, 4 },
+  {  A3,  A4,  A5, 11, 12, DECK_A, 4 },
+  {  A8,  A9, A10, 13, 14, DECK_A, 4 },
+  { A11, A12, A13, 15, 16, DECK_A, 4 },
+  {  14,  15,  16, 17, 18, DECK_A, 4 },
+  {  17,  18,  19, 19, 20, DECK_A, 4 },
   
   // DECK B
-  {  22,  24,  26,  1,  2, 2, 4 },
-  {  23,  25,  27,  3,  4, 2, 4 },
-  {  28,  30,  32,  5,  6, 2, 4 },
-  {  29,  31,  33,  7,  8, 2, 4 },
-  {  34,  36,  38,  9, 10, 2, 4 },
-  {  35,  37,  39, 11, 12, 2, 4 },
-  {  40,  42,  44, 13, 14, 2, 4 },
-  {  41,  43,  45, 15, 16, 2, 4 },
-  {  46,  48,  50, 17, 18, 2, 4 },
-  {  47,  49,  51, 19, 20, 2, 4 }
+  {  28,  30,  32,  5,  6, DECK_B, 4 },
+  {  29,  31,  33,  7,  8, DECK_B, 4 },
+  {  34,  36,  38,  9, 10, DECK_B, 4 },
+  {  35,  37,  39, 11, 12, DECK_B, 4 },
+  {  40,  42,  44, 13, 14, DECK_B, 4 },
+  {  41,  43,  45, 15, 16, DECK_B, 4 },
+  {  46,  48,  50, 17, 18, DECK_B, 4 },
+  {  47,  49,  51, 19, 20, DECK_B, 4 }
 
 };
 
@@ -109,8 +129,24 @@ MIDI_CREATE_INSTANCE(HardwareSerial,Serial, midiOut); // create a MIDI object ca
  *  Knob
  *************/
 
-void knobSetup(Knob* knob) {
+void setupKnobs() {
+    for(int i = 0; i < count_knobs; i++) {
+    _setupKnob(&knobs[i]);
+  }
+}
+
+void _setupKnob(Knob* knob) {
    pinMode(knob->button_pin, INPUT_PULLUP);
+}
+
+void loopKnobs() {  
+  for(int i = 0; i < count_knobs; i++) {
+    // Rotation
+    Knob* knob = &knobs[i];
+    
+    knobProcessRotary(knob);
+    knobProcessButton(knob);
+  }
 }
 
 void knobProcessRotary(Knob* knob) {
@@ -127,16 +163,17 @@ void knobProcessRotary(Knob* knob) {
   }
 
   int value_to_send = _knobGetValueToSend(knob);
+  int channel = getChannelFromDeck(knob->deck);
   
   if(DEBUG == false) {
     // send a MIDI CC -- 56 = note, 127 = velocity, 1 = channel
     midiOut.sendControlChange(
       knob->control_number_value,
       value_to_send,
-      knob->channel
+      channel
     );
   } else {
-    p("Rotation: %i:%i %i", knob->control_number_value, knob->channel, value_to_send);  
+    p("Rotation: %i:%i %i", knob->control_number_value, channel, value_to_send);  
   }
 }
 
@@ -161,13 +198,14 @@ void knobProcessButton(Knob* knob) {
   } else {
     return;
   }
-  
+
+  int channel = getChannelFromDeck(knob->deck);
   int value_to_send = knob->button_is_pressed ? 0 : 1;
 
   if(DEBUG == false) {
-    midiOut.sendNoteOn(knob->control_number_mute, value_to_send, knob->channel);
+    midiOut.sendNoteOn(knob->control_number_mute, value_to_send, channel);
   } else {
-    p("Button: %i:%i %s %i", knob->control_number_mute, knob->channel, knob->button_is_pressed ? "Pressed" : "Released", value_to_send);
+    p("Button: %i:%i %s %i", knob->control_number_mute, channel, knob->button_is_pressed ? "Pressed" : "Released", value_to_send);
   }
 }
 
@@ -179,6 +217,101 @@ int _knobGetValueToSend(Knob* knob) {
     value_to_send = 0;
   }
   return value_to_send;  
+}
+
+/*************
+ * PositionLoopKnob
+ *************/
+
+
+PositionLoopKnob position_loop_knobs[] = {
+  // DECK A
+  {   2,   3,   4,  11,  12, 14, 15, DECK_A },
+  {   5,   6,   7,  16,  17, 18, 19, DECK_A },
+
+  // DECK B
+  {  22,  24,  26,  11,  12, 14, 15, DECK_B },
+  {  23,  25,  27,  16,  17, 18, 19, DECK_B },
+};
+
+const int count_position_loop_knobs = sizeof(position_loop_knobs) / sizeof(PositionLoopKnob);
+
+void setupPositionLoopKnobs() {
+  for(int i = 0; i < count_position_loop_knobs; i++) {
+    PositionLoopKnob* currKnob = &position_loop_knobs[i];
+    pinMode(currKnob->button_pin, INPUT_PULLUP);
+  }
+}
+
+void loopPositionLoopKnobs() {
+  for(int i = 0; i < count_position_loop_knobs; i++) {
+    PositionLoopKnob* currKnob = &position_loop_knobs[i];
+    processLoopPositionKnobRotary(currKnob);
+    processLoopPositionKnobButton(currKnob);
+  }
+}
+
+void processLoopPositionKnobRotary(PositionLoopKnob* knob) {
+  int result = knob->rotary.process();
+
+  if (result == DIR_NONE) return;
+
+  bool turned_left;
+  if (result == DIR_CCW) {
+    turned_left = false;
+  } else if(result == DIR_CW)  {
+    turned_left = true;
+  } else {
+    return;
+  }
+
+  int channel = getChannelFromDeck(knob->deck);
+  int control_number = turned_left ? knob->control_number_left : knob->control_number_right;
+  
+  if(DEBUG == false) {
+    // send a MIDI CC -- 56 = note, 127 = velocity, 1 = channel
+    midiOut.sendControlChange(
+      control_number,
+      1,
+      channel
+    );
+  } else {
+    p("PositionLoop: %i:%i %i %s", control_number, channel, 1, turned_left ? "Left": "Right");  
+  }
+}
+
+void processLoopPositionKnobButton(PositionLoopKnob* knob) {
+  int button = digitalRead(knob->button_pin);
+  
+  /*if(button == LOW && knob->button_is_pressed == false) {
+    knob->button_is_pressed = true;
+  } else if(button == HIGH && knob->button_is_pressed == true) {
+    knob->button_is_pressed = false;
+  } else {
+    return;
+  }*/
+  
+  if(button == LOW && knob->button_was_pressed == false) {
+    
+    knob->button_is_pressed = !knob->button_is_pressed;
+    knob->button_was_pressed = true;
+  } else if(button == HIGH && knob->button_was_pressed == true){
+    knob->button_was_pressed = false;
+    return;
+  } else {
+    return;
+  }
+
+  int control_number = knob->button_is_pressed ? knob->control_number_press : knob->control_number_release;
+  int channel = getChannelFromDeck(knob->deck);
+  
+  int value_to_send = knob->button_is_pressed ? 0 : 1;
+
+  if(DEBUG == false) {
+    midiOut.sendNoteOn(control_number, 1, channel);
+  } else {
+    p("PositionLoop Button: %i:%i %s", control_number, channel, knob->button_is_pressed ? "Pressed" : "Released");
+  }
 }
 
 
@@ -341,14 +474,16 @@ void p(char *fmt, ... ){
   Serial.println(buf);
 }
 
+/**********
+ * ARDUINO
+ **********/
+
 void setup() {
   Serial.begin(115200);
-  for(int i = 0; i < count_knobs; i++) {
-    knobSetup(&knobs[i]);
-  }
 
+  setupKnobs();
+  setupPositionLoopKnobs();
   setupMatrix();
-  
 }
 
 void loop() {
@@ -356,14 +491,9 @@ void loop() {
     BENCH_START_TIME = micros();
   }
 
-  for(int i = 0; i < count_knobs; i++) {
-    // Rotation
-    Knob* knob = &knobs[i];
-    
-    knobProcessRotary(knob);
-    knobProcessButton(knob);
-  }
 
+  loopKnobs();
+  loopPositionLoopKnobs();
   loopMatrixCol();
 
   if(BENCHMARK == true) {
