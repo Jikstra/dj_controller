@@ -6,7 +6,7 @@
 #include <midi_Settings.h>
 #include <stdarg.h>
 
-const bool DEBUG = false;
+const bool DEBUG = true;
 const bool BENCHMARK = false;
 
 int BENCH_START_TIME = 0;
@@ -28,14 +28,16 @@ struct Knob {
   int step_size;
   bool button_is_pressed;
   bool button_was_pressed;
+  unsigned long button_last_flake;
   Rotary rotary;
   int rotary_counter;
   Knob(int rotary_pin_a, int button_pin, int rotary_pin_b, int control_number_value, int control_number_mute, bool deck, int step_size) : 
     button_pin(button_pin),
     button_is_pressed(false),
     button_was_pressed(false),
+    button_last_flake(0),
     rotary(Rotary(rotary_pin_a, rotary_pin_b)),
-    rotary_counter(0),
+    rotary_counter(63),
     control_number_value(control_number_value),
     control_number_mute(control_number_mute),
     deck(deck),
@@ -70,12 +72,14 @@ struct PositionLoopKnob {
   int button_pin;
   bool button_is_pressed;
   bool button_was_pressed;
+  unsigned long button_last_flake;
   Rotary rotary;
   int rotary_counter;
   PositionLoopKnob(int rotary_pin_a, int button_pin, int rotary_pin_b, int control_number_left, int control_number_right, int control_number_press, int control_number_release, bool deck) : 
     button_pin(button_pin),
     button_is_pressed(false),
     button_was_pressed(false),
+    button_last_flake(0),
     rotary(Rotary(rotary_pin_a, rotary_pin_b)),
     control_number_left(control_number_left),
     control_number_right(control_number_right),
@@ -189,10 +193,11 @@ void knobProcessButton(Knob* knob) {
   }*/
   
   if(button == LOW && knob->button_was_pressed == false) {
-    
+    if(isBouncing(&knob->button_last_flake)) return;
     knob->button_is_pressed = !knob->button_is_pressed;
     knob->button_was_pressed = true;
   } else if(button == HIGH && knob->button_was_pressed == true){
+    if(isBouncing(&knob->button_last_flake)) return;
     knob->button_was_pressed = false;
     return;
   } else {
@@ -226,12 +231,12 @@ int _knobGetValueToSend(Knob* knob) {
 
 PositionLoopKnob position_loop_knobs[] = {
   // DECK A
-  {   2,   3,   4,  11,  12, 14, 15, DECK_A },
-  {   5,   6,   7,  16,  17, 18, 19, DECK_A },
+  {   2,   3,   4,  31,  32, 33, 33, DECK_A },
+  {   5,   6,   7,  36,  37, 38, 38, DECK_A },
 
   // DECK B
-  {  22,  24,  26,  11,  12, 14, 15, DECK_B },
-  {  23,  25,  27,  16,  17, 18, 19, DECK_B },
+  {  22,  24,  26,  31,  32, 33, 33, DECK_B },
+  {  23,  25,  27,  36,  37, 38, 38, DECK_B },
 };
 
 const int count_position_loop_knobs = sizeof(position_loop_knobs) / sizeof(PositionLoopKnob);
@@ -292,10 +297,11 @@ void processLoopPositionKnobButton(PositionLoopKnob* knob) {
   }*/
   
   if(button == LOW && knob->button_was_pressed == false) {
-    
+    if(isBouncing(&knob->button_last_flake)) return;
     knob->button_is_pressed = !knob->button_is_pressed;
     knob->button_was_pressed = true;
   } else if(button == HIGH && knob->button_was_pressed == true){
+    if(isBouncing(&knob->button_last_flake)) return;
     knob->button_was_pressed = false;
     return;
   } else {
@@ -330,16 +336,12 @@ void buttonProcess(Button* button) {
 
 void _buttonProcess(Button* button, int state) {
   if(state == LOW && button->switch_was_up == false) {
-    unsigned long current_flake = millis();
-    if(current_flake - button->last_flake < 50) return;
+    if(isBouncing(&button->last_flake)) return;
     button->switch_is_up = !button->switch_is_up;
     button->switch_was_up = true;
-    button->last_flake = current_flake;
   } else if(state == HIGH && button->switch_was_up == true){
-    unsigned long current_flake = millis();
-    if(current_flake - button->last_flake < 50) return;
+    if(isBouncing(&button->last_flake)) return;
     button->switch_was_up = false;
-    button->last_flake = current_flake;
     return;
   } else {
     return;
@@ -463,6 +465,13 @@ int getChannelFromDeck(bool deck) {
   } else {
     return channel_deck_b;
   }
+}
+
+bool isBouncing(unsigned long* last_flake_millis) {
+  unsigned long current_flake = millis();
+  bool returnValue = current_flake - *last_flake_millis < 50;
+  *last_flake_millis = current_flake;
+  return returnValue;  
 }
 
 void p(char *fmt, ... ){
