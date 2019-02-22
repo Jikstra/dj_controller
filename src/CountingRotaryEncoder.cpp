@@ -1,16 +1,23 @@
-#include "knob.h"
+#include "CountingRotaryEncoder.h"
 #include "common.h"
 #include "midi.h"
 #include "debug.h"
 
-Knob::Knob(int rotary_pin_a, int button_pin, int rotary_pin_b, int control_number_value, int control_number_mute, bool deck, int step_size) : 
-    rotary(Rotary(rotary_pin_a, rotary_pin_b)),
+CountingRotaryEncoder::CountingRotaryEncoder
+    (
+      int rotary_pin_a,
+      int button_pin,
+      int rotary_pin_b,
+      int control_number_value,
+      int control_number_mute,
+      bool deck,
+      int step_size
+    ) : 
+    RotaryEncoder(rotary_pin_a, button_pin, rotary_pin_b),
     rotary_counter(63),
-    
-    button_pin(button_pin),
+   
     button_is_pressed(false),
     button_was_pressed(false),
-    button_last_flake(0),
     
     control_number_value(control_number_value),
     control_number_mute(control_number_mute),
@@ -18,23 +25,20 @@ Knob::Knob(int rotary_pin_a, int button_pin, int rotary_pin_b, int control_numbe
     deck(deck),
     step_size(step_size) {}
 
-void Knob::setup() {
-  pinMode(button_pin, INPUT_PULLUP);
+int CountingRotaryEncoder::_getValueToSend() {
+  int value_to_send = rotary_counter;
+  if(value_to_send > 127) {
+    value_to_send = 127;
+  } else if(value_to_send < 0) {
+    value_to_send = 0;
+  }
+  return value_to_send;  
 }
 
-void Knob::process() {
-  processRotary();
-  processButton();
-}
-
-void Knob::processRotary() {
-  int result = rotary.process();
-
-  if (result == DIR_NONE) return;
-
-  if (result == DIR_CCW && rotary_counter < 127) {
+void CountingRotaryEncoder::handleRotaryTurn(bool turnedLeft) {
+  if (turnedLeft == true && rotary_counter < 127) {
     rotary_counter = rotary_counter + step_size;
-  } else if(result == DIR_CW && rotary_counter > 0)  {
+  } else if(turnedLeft == false && rotary_counter > 0)  {
     rotary_counter = rotary_counter - step_size;
   } else {
     return;
@@ -56,23 +60,11 @@ void Knob::processRotary() {
   );
 }
 
-void Knob::processButton() {
-  int button = digitalRead(button_pin);
-  
-  /*if(button == LOW && button_is_pressed == false) {
-    button_is_pressed = true;
-  } else if(button == HIGH && button_is_pressed == true) {
-    button_is_pressed = false;
-  } else {
-    return;
-  }*/
-  
+void CountingRotaryEncoder::handleButtonPress(bool button) {
   if(button == LOW && button_was_pressed == false) {
-    if(isBouncing(&button_last_flake)) return;
     button_is_pressed = !button_is_pressed;
     button_was_pressed = true;
   } else if(button == HIGH && button_was_pressed == true){
-    if(isBouncing(&button_last_flake)) return;
     button_was_pressed = false;
     return;
   } else {
@@ -89,12 +81,3 @@ void Knob::processButton() {
   IFNDEBUG(midiOut.sendNoteOn(control_number_mute, value_to_send, channel));
 }
 
-int Knob::_getValueToSend() {
-  int value_to_send = rotary_counter;
-  if(value_to_send > 127) {
-    value_to_send = 127;
-  } else if(value_to_send < 0) {
-    value_to_send = 0;
-  }
-  return value_to_send;  
-}

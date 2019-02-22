@@ -3,7 +3,7 @@
 #include "main.h"
 #include "common.h"
 #include "button.h"
-#include "knob.h"
+#include "CountingRotaryEncoder.h"
 
 const bool BENCHMARK = false;
 
@@ -16,7 +16,7 @@ int BENCH_MAX_TOTAL = 0;
  * START PIN LAYOUT
  *************/
 
-Knob knobs[] = {
+CountingRotaryEncoder knobs[] = {
   // DECK A
   {   8,   9,  10,  5,  6, DECK_A, 4 },
   {  11,  12,  13,  7,  8, DECK_A, 4 },
@@ -72,7 +72,7 @@ Button matrix_buttons_col_c[] = {
 const int count_matrix_buttons_col_c = sizeof(matrix_buttons_col_c) / sizeof(Button);
 
 
-const int count_knobs = sizeof(knobs) / sizeof(Knob);
+const int count_knobs = sizeof(knobs) / sizeof(CountingRotaryEncoder);
 //int count_knobs = 2;
 
 /*************
@@ -82,7 +82,7 @@ const int count_knobs = sizeof(knobs) / sizeof(Knob);
 void setupKnobs() {
   for(int i = 0; i < count_knobs; i++) {
     // Rotation
-    Knob* knob = &knobs[i];
+    CountingRotaryEncoder* knob = &knobs[i];
     knob->setup();
     free(knob);
   }
@@ -97,7 +97,7 @@ void setup()
 void loopKnobs() {
   for(int i = 0; i < count_knobs; i++) {
     // Rotation
-    Knob* knob = &knobs[i];
+    CountingRotaryEncoder* knob = &knobs[i];
     knob->process();
     free(knob);
   }

@@ -7,4 +7,6 @@
 #include <midi_Namespace.h>
 #include <midi_Settings.h>
 
+extern midi::MidiInterface<HardwareSerial> midiOut;
+
 #endif
