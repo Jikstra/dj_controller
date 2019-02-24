@@ -9,6 +9,8 @@ class RotaryEncoder {
   Rotary rotary;
 
   int button_pin;
+  bool button_is_pressed;
+  bool button_was_pressed;
   unsigned long button_last_flake;
 
   public:
@@ -19,6 +21,7 @@ class RotaryEncoder {
     void processButton();
     void handleRotaryTurn(bool turnedLeft);
     void handleButtonPress(bool isPressed);
+    void handleButtonStateChange(bool isPressed);
 };
 
 #endif

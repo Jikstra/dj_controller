@@ -13,9 +13,6 @@ CountingRotaryEncoder::CountingRotaryEncoder
     RotaryEncoder(rotary_pin_a, button_pin, rotary_pin_b),
     rotary_counter(63),
    
-    button_is_pressed(false),
-    button_was_pressed(false),
-    
     control_number_value(control_number_value),
     control_number_mute(control_number_mute),
     
@@ -57,22 +54,12 @@ void CountingRotaryEncoder::handleRotaryTurn(bool turnedLeft) {
   );
 }
 
-void CountingRotaryEncoder::handleButtonPress(bool button) {
-  if(button == LOW && button_was_pressed == false) {
-    button_is_pressed = !button_is_pressed;
-    button_was_pressed = true;
-  } else if(button == HIGH && button_was_pressed == true){
-    button_was_pressed = false;
-    return;
-  } else {
-    return;
-  }
-
+void CountingRotaryEncoder::handleButtonStateChange(bool isPressed) {
   int channel = getChannelFromDeck(deck);
-  int value_to_send = button_is_pressed ? 0 : 1;
+  int value_to_send = isPressed ? 0 : 1;
 
   IFDEBUG(
-    p("Button: %i:%i %s %i", control_number_mute, channel, button_is_pressed ? "Pressed" : "Released", value_to_send)
+    p("Button: %i:%i %s %i", control_number_mute, channel, isPressed ? "Pressed" : "Released", value_to_send)
   );
 
   IFNDEBUG(midiOut.sendNoteOn(control_number_mute, value_to_send, channel));
