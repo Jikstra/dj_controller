@@ -1,27 +1,24 @@
 #include "Button.h"
-#include "../common.h"
-#include "../midi.h"
-#include "../debug.h"
 
 Button::Button(int pin, int control_number, bool deck) :
-  pin(pin),
   control_number(control_number),
   deck(deck),
   last_flake(0),
   switch_is_up(true),
-  switch_was_up(true) {}
+  switch_was_up(true),
+  pin(pin) {}
 
 
 void Button::setup() {
   pinMode(pin, INPUT_PULLUP);
 }
 
-void Button::loop() {
+void Button::process() {
   int state = digitalRead(pin);
-  _loop(state);
+  _process(state);
 }
 
-void Button::_loop(int state) {
+void Button::_process(int state) {
   if(state == LOW && switch_was_up == false) {
     if(isBouncing(&last_flake)) return;
     switch_is_up = !switch_is_up;

@@ -83,10 +83,27 @@ void setupKnobs() {
   }
 }
 
+void setupMatrix() {
+  Matrix::setupCol(matrix_col_a);
+  
+  for(int i=0; i<count_matrix_buttons_col_a; i++) {
+    Button* curRowButton = &matrix_buttons_col_a[i];
+    Matrix::setupRow(curRowButton->pin);
+  }
+  
+  Matrix::setupCol(matrix_col_b);
+  // put your setup code here, to run once:
+  for(int i=0; i<count_matrix_buttons_col_b; i++) {
+    Button* curRowButton = &matrix_buttons_col_b[i];
+    Matrix::setupRow(curRowButton->pin);
+  }
+}
+
 void setup()
 {
   Serial.begin(115200);
   setupKnobs();
+  setupMatrix();
 }
 
 void loopKnobs() {
@@ -97,8 +114,36 @@ void loopKnobs() {
     free(knob);
   }
 }
+void loopMatrixButtons(Button buttons[], int count) {
+  for(int i=0; i<count; i++) {
+    Button* curButton = &buttons[i];
+
+    int curButtonState = Matrix::digitalReadRow(curButton->pin);
+
+    curButton->_process(curButtonState);
+  }  
+}
+
+void loopMatrix() {
+  int curCol = matrix_col_a;
+  
+  Matrix::startCol(curCol);
+
+  loopMatrixButtons(matrix_buttons_col_a, count_matrix_buttons_col_a);
+
+  Matrix::endCol(curCol);
+
+  curCol = matrix_col_b;
+  Matrix::startCol(curCol);
+
+  loopMatrixButtons(matrix_buttons_col_b, count_matrix_buttons_col_b);
+
+  Matrix::endCol(curCol);
+
+}
 
 void loop()
 {
   loopKnobs();
+  loopMatrix();
 }

@@ -6,5 +6,6 @@
 #include "common.h"
 #include "components/Button.h"
 #include "components/CountingRotaryEncoder.h"
+#include "components/Matrix.h"
 
 #endif

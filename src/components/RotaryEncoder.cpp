@@ -7,9 +7,9 @@ RotaryEncoder::RotaryEncoder(
   ) : 
     rotary(Rotary(rotary_pin_a, rotary_pin_b)),
     button_pin(button_pin),
-    button_last_flake(0),
     button_is_pressed(false),
-    button_was_pressed(false) {}
+    button_was_pressed(false),
+    button_last_flake(0) {}
 
 
 void RotaryEncoder::setup() {
