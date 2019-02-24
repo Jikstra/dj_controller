@@ -2,10 +2,13 @@
 #define MATRIX_H
 #include <Arduino.h>
 
-void setupMatrixCol(int pin);
-void setupMatrixRow(int pin);
-void matrixStartCol(int pin);
-void matrixStartCol(int pin);
-int matrixDigitalReadRow(int curRow);
+namespace Matrix
+{
+  void setupCol(int pin);
+  void setupRow(int pin);
+  void startCol(int pin);
+  void endCol(int pin);
+  int digitalReadRow(int curRow);
+}
 
 #endif
