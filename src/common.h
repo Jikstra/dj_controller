@@ -13,6 +13,4 @@ void p(char *fmt, ... );
 int getChannelFromDeck(bool deck);
 bool isBouncing(unsigned long* last_flake_millis);
 
-
-
 #endif

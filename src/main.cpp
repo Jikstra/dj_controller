@@ -1,9 +1,4 @@
-#include "Arduino.h"
-
 #include "main.h"
-#include "common.h"
-#include "button.h"
-#include "CountingRotaryEncoder.h"
 
 const bool BENCHMARK = false;
 

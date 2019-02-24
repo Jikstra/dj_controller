@@ -3,6 +3,8 @@
 
 #include "Arduino.h"
 
-
+#include "common.h"
+#include "components/Button.h"
+#include "components/CountingRotaryEncoder.h"
 
 #endif
