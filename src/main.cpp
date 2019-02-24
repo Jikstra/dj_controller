@@ -11,7 +11,8 @@ int BENCH_MAX_TOTAL = 0;
  * START PIN LAYOUT
  *************/
 
-CountingRotaryEncoder knobs[] = {
+// C O U N T I N G  R O T A R Y  E N C O D E R S
+CountingRotaryEncoder counting_rotary_encoders[] = {
   // DECK A
   {   8,   9,  10,  5,  6, DECK_A, 4 },
   {  11,  12,  13,  7,  8, DECK_A, 4 },
@@ -31,9 +32,24 @@ CountingRotaryEncoder knobs[] = {
   {  41,  43,  45, 15, 16, DECK_B, 4 },
   {  46,  48,  50, 17, 18, DECK_B, 4 },
   {  47,  49,  51, 19, 20, DECK_B, 4 }
-
 };
 
+const int count_counting_rotary_encoders = sizeof(counting_rotary_encoders) / sizeof(CountingRotaryEncoder);
+
+// L R  R O T A R Y  E N C O D E R S
+LRRotaryEncoder lr_rotary_encoders[] = {
+  // DECK A
+  {   2,   3,   4,  31,  32, 33, 33, DECK_A },
+  {   5,   6,   7,  36,  37, 38, 38, DECK_A },
+
+  // DECK B
+  {  22,  24,  26,  31,  32, 33, 33, DECK_B },
+  {  23,  25,  27,  36,  37, 38, 38, DECK_B },
+};
+
+const int count_lr_rotary_encoders = sizeof(lr_rotary_encoders) / sizeof(LRRotaryEncoder);
+
+// M A T R I X
 int matrix_col_a = A6;
 int matrix_col_b = A7;
 int matrix_col_c = A14;
@@ -67,19 +83,39 @@ Button matrix_buttons_col_c[] = {
 const int count_matrix_buttons_col_c = sizeof(matrix_buttons_col_c) / sizeof(Button);
 
 
-const int count_knobs = sizeof(knobs) / sizeof(CountingRotaryEncoder);
-//int count_knobs = 2;
-
 /*************
  * END PIN LAYOUT
  *************/
 
 void setupKnobs() {
-  for(int i = 0; i < count_knobs; i++) {
+  for(int i = 0; i < count_counting_rotary_encoders; i++) {
     // Rotation
-    CountingRotaryEncoder* knob = &knobs[i];
+    CountingRotaryEncoder* knob = &counting_rotary_encoders[i];
     knob->setup();
     free(knob);
+  }
+}
+
+void loopKnobs() {
+  for(int i = 0; i < count_counting_rotary_encoders; i++) {
+    // Rotation
+    CountingRotaryEncoder* knob = &counting_rotary_encoders[i];
+    knob->process();
+    free(knob);
+  }
+}
+
+void setupLRRotaryEncoders() {
+  for(int i = 0; i < count_lr_rotary_encoders; i++) {
+    LRRotaryEncoder* currKnob = &lr_rotary_encoders[i];
+    currKnob->setup();
+  }
+}
+
+void loopLRRotaryEncoders() {
+  for(int i = 0; i < count_lr_rotary_encoders; i++) {
+    LRRotaryEncoder* currKnob = &lr_rotary_encoders[i];
+    currKnob->process();
   }
 }
 
@@ -99,21 +135,6 @@ void setupMatrix() {
   }
 }
 
-void setup()
-{
-  Serial.begin(115200);
-  setupKnobs();
-  setupMatrix();
-}
-
-void loopKnobs() {
-  for(int i = 0; i < count_knobs; i++) {
-    // Rotation
-    CountingRotaryEncoder* knob = &knobs[i];
-    knob->process();
-    free(knob);
-  }
-}
 void loopMatrixButtons(Button buttons[], int count) {
   for(int i=0; i<count; i++) {
     Button* curButton = &buttons[i];
@@ -142,8 +163,22 @@ void loopMatrix() {
 
 }
 
+/*******
+ * ARDUINO
+ ******/
+
+void setup()
+{
+  Serial.begin(115200);
+  setupKnobs();
+  setupLRRotaryEncoders();
+  setupMatrix();
+}
+
+
 void loop()
 {
   loopKnobs();
+  loopLRRotaryEncoders();
   loopMatrix();
 }
