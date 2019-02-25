@@ -146,20 +146,14 @@ void loopMatrixButtons(Button buttons[], int count) {
 
 void loopMatrix() {
   int curCol = matrix_col_a;
-  
   Matrix::startCol(curCol);
-
   loopMatrixButtons(matrix_buttons_col_a, count_matrix_buttons_col_a);
-
   Matrix::endCol(curCol);
 
   curCol = matrix_col_b;
   Matrix::startCol(curCol);
-
   loopMatrixButtons(matrix_buttons_col_b, count_matrix_buttons_col_b);
-
   Matrix::endCol(curCol);
-
 }
 
 /*******
