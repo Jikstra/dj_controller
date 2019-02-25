@@ -26,7 +26,7 @@ class CountingRotaryEncoder : public RotaryEncoder {
       int step_size
     );
     void handleRotaryTurn(bool turnedLeft);
-    void handleButtonStateChange(bool isPressed);
+    void handleButtonToggle(bool toggle);
     int _getValueToSend();
 };
 

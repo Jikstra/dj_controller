@@ -92,16 +92,15 @@ void setupKnobs() {
     // Rotation
     CountingRotaryEncoder* knob = &counting_rotary_encoders[i];
     knob->setup();
-    free(knob);
   }
 }
 
 void loopKnobs() {
   for(int i = 0; i < count_counting_rotary_encoders; i++) {
     // Rotation
+    //p("test1 %i", i);
     CountingRotaryEncoder* knob = &counting_rotary_encoders[i];
     knob->process();
-    free(knob);
   }
 }
 
@@ -167,12 +166,15 @@ void loopMatrix() {
  * ARDUINO
  ******/
 
+
 void setup()
 {
   Serial.begin(115200);
+
   setupKnobs();
   setupLRRotaryEncoders();
   setupMatrix();
+
 }
 
 
@@ -181,4 +183,5 @@ void loop()
   loopKnobs();
   loopLRRotaryEncoders();
   loopMatrix();
+  
 }

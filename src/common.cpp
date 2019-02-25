@@ -21,9 +21,46 @@ int getChannelFromDeck(bool deck) {
   }
 }
 
-bool isBouncing(unsigned long* last_flake_millis) {
+bool isBouncing(unsigned long* lastFlakeMillis) {
   unsigned long current_flake = millis();
-  bool returnValue = current_flake - *last_flake_millis < 50;
-  *last_flake_millis = current_flake;
+  //p("current_flake %lu last_flake %lu", current_flake, *lastFlakeMillis);
+  bool returnValue = current_flake - *lastFlakeMillis < 50;
+  *lastFlakeMillis = current_flake;
   return returnValue;  
+}
+
+
+ButtonState buttonState(int pinValue, bool* wasPressed,  unsigned long* lastFlakeMillis) {
+  if(pinValue == LOW && *wasPressed == false) {
+    if(isBouncing(lastFlakeMillis)) return;
+    *wasPressed = true;
+    return ButtonState::Pressed;
+  } else if(pinValue == HIGH && *wasPressed == true){
+    if(isBouncing(lastFlakeMillis)) return;
+    *wasPressed = false;
+    return ButtonState::Unpressed;
+  } else {
+    return ButtonState::Unchanged;
+  }
+}
+
+char* buttonStateToString(ButtonState buttonState) {
+  switch(buttonState) {
+    case ButtonState::Pressed:
+      return "Pressed";
+    case ButtonState::Unchanged:
+      return "Unchanged";
+    case ButtonState::Unpressed:
+      return "Unpressed";
+    default:
+      return "Invalid Enum";
+  }
+}
+
+bool buttonToggle(ButtonState buttonState, bool* toggle) {
+  if(buttonState == ButtonState::Pressed) {
+    *toggle = !*toggle;
+    return true;
+  }
+  return false;
 }

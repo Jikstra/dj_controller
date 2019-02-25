@@ -7,12 +7,13 @@ RotaryEncoder::RotaryEncoder(
   ) : 
     rotary(Rotary(rotary_pin_a, rotary_pin_b)),
     button_pin(button_pin),
-    button_is_pressed(false),
     button_was_pressed(false),
+    button_toggle(false),
     button_last_flake(0) {}
 
 
 void RotaryEncoder::setup() {
+  rotary.begin(true);
   pinMode(button_pin, INPUT_PULLUP);
 }
 
@@ -22,40 +23,30 @@ void RotaryEncoder::process() {
 }
 
 void RotaryEncoder::processRotary() {
-  int result = rotary.process();
-
-
+  unsigned char result = rotary.process();
+  
   if (result == DIR_NONE) return;
-
-  handleRotaryTurn(result == DIR_CW);
+  handleRotaryTurn(result == DIR_CCW);
 }
 
 void RotaryEncoder::handleRotaryTurn(bool turnedLeft) {}
 
 void RotaryEncoder::processButton() {
-  int button = digitalRead(button_pin);
+  int pinValue = digitalRead(button_pin); 
+  ButtonState button_state = buttonState(pinValue, &button_was_pressed, &button_last_flake);
 
-  if(isBouncing(&button_last_flake)) return;
-  handleButtonPress(button == HIGH);
+  handleButtonState(button_state);
 }
 
-void RotaryEncoder::handleButtonPress(bool isHigh) {
-  if(!isHigh && button_was_pressed == false) {
-    button_is_pressed = !button_is_pressed;
-    button_was_pressed = true;
-  } else if(isHigh && button_was_pressed == true){
-    button_was_pressed = false;
-    return;
-  } else {
-    return;
+void RotaryEncoder::handleButtonState(ButtonState button_state) {
+  if(buttonToggle(button_state, &button_toggle)) {
+    handleButtonToggle(button_toggle);    
   }
-
-  handleButtonStateChange(button_is_pressed);
 }
 
-void RotaryEncoder::handleButtonStateChange(bool isPressed) {
-
+void RotaryEncoder::handleButtonToggle(bool toggle) {
 }
+
 
 
 

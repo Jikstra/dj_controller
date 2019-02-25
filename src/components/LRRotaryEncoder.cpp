@@ -34,17 +34,17 @@ void LRRotaryEncoder::handleRotaryTurn(bool turnedLeft) {
   );
 
   IFDEBUG(
-    p("PositionLoop: %i:%i %i %s", control_number, channel, 1, turned_left ? "Left": "Right");  
+    p("PositionLoop: %i:%i %i %s", control_number, channel, 1, turnedLeft ? "Left": "Right");  
   );
 }
 
-void LRRotaryEncoder::handleButtonStateChange(bool isPressed) {
+void LRRotaryEncoder::handleButtonToggle(bool toggle) {
   int channel = getChannelFromDeck(deck);
   int value_to_send = 1;
-  int control_number = isPressed ? control_number_press : control_number_release;
+  int control_number = toggle ? control_number_press : control_number_release;
 
-  IFDEBUG(i
-    p("Button: %i:%i %s %i", control_number, channel, isPressed ? "Pressed" : "Released", value_to_send)
+  IFDEBUG(
+    p("Button: %i:%i %s %i", control_number, channel, toggle ? "Pressed" : "Released", value_to_send)
   );
 
   IFNDEBUG(midiOut.sendNoteOn(control_number, value_to_send, channel));

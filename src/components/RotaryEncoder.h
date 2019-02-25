@@ -6,22 +6,23 @@
 #include "common.h"
 
 class RotaryEncoder {
-  Rotary rotary;
-
-  int button_pin;
-  bool button_is_pressed;
-  bool button_was_pressed;
-  unsigned long button_last_flake;
 
   public:
+    Rotary rotary;
+
+    int button_pin;
+    bool button_was_pressed;
+    bool button_toggle;
+    unsigned long button_last_flake;
+
     RotaryEncoder(int rotary_pin_a, int button_pin, int rotary_pin_b);
     void setup();
     void process();
     void processRotary();
     void processButton();
-    void handleRotaryTurn(bool turnedLeft);
-    void handleButtonPress(bool isPressed);
-    void handleButtonStateChange(bool isPressed);
+    virtual void handleRotaryTurn(bool turnedLeft);
+    virtual void handleButtonState(ButtonState buttonState);
+    virtual void handleButtonToggle(bool toggle);
 };
 
 #endif
