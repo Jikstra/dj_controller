@@ -59,7 +59,7 @@ void CountingRotaryEncoder::handleButtonToggle(bool toggle) {
   int value_to_send = toggle;
 
   IFDEBUG(
-    p("Button: %i:%i %s %i", control_number_mute, channel, toggle ? "Pressed" : "Released", value_to_send)
+    p("Button: %i:%i %s %i", control_number_mute, channel, toggle ? "Toggled" : "Untoggled", value_to_send)
   );
 
   IFNDEBUG(midiOut.sendNoteOn(control_number_mute, value_to_send, channel));

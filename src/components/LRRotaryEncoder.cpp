@@ -44,7 +44,7 @@ void LRRotaryEncoder::handleButtonToggle(bool toggle) {
   int control_number = toggle ? control_number_press : control_number_release;
 
   IFDEBUG(
-    p("Button: %i:%i %s %i", control_number, channel, toggle ? "Pressed" : "Released", value_to_send)
+    p("Button: %i:%i %s %i", control_number, channel, toggle ? "Toggled" : "Untoggled", value_to_send)
   );
 
   IFNDEBUG(midiOut.sendNoteOn(control_number, value_to_send, channel));

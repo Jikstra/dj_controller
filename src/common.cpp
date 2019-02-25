@@ -21,31 +21,31 @@ int getChannelFromDeck(bool deck) {
   }
 }
 
-bool isBouncing(unsigned long* lastFlakeMillis) {
+bool isBouncing(unsigned long* last_flake_millis) {
   unsigned long current_flake = millis();
-  //p("current_flake %lu last_flake %lu", current_flake, *lastFlakeMillis);
-  bool returnValue = current_flake - *lastFlakeMillis < 50;
-  *lastFlakeMillis = current_flake;
+  //p("current_flake %lu last_flake %lu", current_flake, *last_flake_millis);
+  bool returnValue = current_flake - *last_flake_millis < 50;
+  *last_flake_millis = current_flake;
   return returnValue;  
 }
 
 
-ButtonState buttonState(int pinValue, bool* wasPressed,  unsigned long* lastFlakeMillis) {
-  if(pinValue == LOW && *wasPressed == false) {
-    if(isBouncing(lastFlakeMillis)) return;
-    *wasPressed = true;
+ButtonState buttonState(int pin_value, bool* was_pressed,  unsigned long* last_flake_millis) {
+  if(pin_value == LOW && *was_pressed == false) {
+    if(isBouncing(last_flake_millis)) return;
+    *was_pressed = true;
     return ButtonState::Pressed;
-  } else if(pinValue == HIGH && *wasPressed == true){
-    if(isBouncing(lastFlakeMillis)) return;
-    *wasPressed = false;
+  } else if(pin_value == HIGH && *was_pressed == true){
+    if(isBouncing(last_flake_millis)) return;
+    *was_pressed = false;
     return ButtonState::Unpressed;
   } else {
     return ButtonState::Unchanged;
   }
 }
 
-char* buttonStateToString(ButtonState buttonState) {
-  switch(buttonState) {
+char* buttonStateToString(ButtonState button_state) {
+  switch(button_state) {
     case ButtonState::Pressed:
       return "Pressed";
     case ButtonState::Unchanged:
@@ -57,8 +57,8 @@ char* buttonStateToString(ButtonState buttonState) {
   }
 }
 
-bool buttonToggle(ButtonState buttonState, bool* toggle) {
-  if(buttonState == ButtonState::Pressed) {
+bool buttonToggle(ButtonState button_state, bool* toggle) {
+  if(button_state == ButtonState::Pressed) {
     *toggle = !*toggle;
     return true;
   }
