@@ -15,9 +15,9 @@ void p(char *fmt, ... ){
 
 int getChannelFromDeck(bool deck) {
   if(deck == DECK_A) {
-    return 1;
+    return channel_deck_a;
   } else {
-    return 0;
+    return channel_deck_b;
   }
 }
 

@@ -55,20 +55,19 @@ int matrix_col_b = A7;
 int matrix_col_c = A14;
 
 Button matrix_buttons_col_a[] = {
-  { 20, 50, DECK_A },
-  { 21, 51, DECK_A },
-  { 52, 52, DECK_A },
-  { 53, 53, DECK_A },
-};
-
-const int count_matrix_buttons_col_a = sizeof(matrix_buttons_col_a) / sizeof(Button);
-
-
-Button matrix_buttons_col_b[] = {
   { 20, 50, DECK_B },
   { 21, 51, DECK_B },
   { 52,  52, DECK_B },
   { 53,  53, DECK_B }
+};
+
+const int count_matrix_buttons_col_a = sizeof(matrix_buttons_col_a) / sizeof(Button);
+
+Button matrix_buttons_col_b[] = {
+  { 20, 50, DECK_A },
+  { 21, 51, DECK_A },
+  { 52, 52, DECK_A },
+  { 53, 53, DECK_A },
 };
 
 const int count_matrix_buttons_col_b = sizeof(matrix_buttons_col_b) / sizeof(Button);

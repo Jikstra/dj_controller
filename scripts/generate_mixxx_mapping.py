@@ -53,6 +53,20 @@ def beatJumpBackward(ch):
             </control>
     ''')
 
+def loopActivate(ch):
+    return('''
+            <control>
+                <group>[Channel''' + str(ch) +  ''']</group>
+                <key>beatloop_activate</key>
+                <description>MIDI Learned from 9 messages.</description>
+                <status>0x9''' + str(ch - 1) +  '''</status>
+                <midino>0x26</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    ''')
+
 def footer():
     return('''
         </controls>
@@ -63,16 +77,26 @@ def footer():
 
 def executeBlock(fnc, *args):
     s = fnc(*args)
-    print(s.strip())
+    print(s)
 
 def executeBlockForAllChannel(fnc):
     [executeBlock(playButton, ch) for ch in range(1, 5)]
 
+def xmlComment(s, lvl=3):
+    xmlBr()
+    print(("    " * lvl) + "<-- " + s + " -->")
 
+def xmlBr():
+    print("\n")
 
 if __name__ == "__main__":
     executeBlock(header)
+    xmlComment("Play Button")
     executeBlockForAllChannel(playButton)
-    executeBlockForAllChannel(beatJumpForward)
+    xmlComment("Position Rotary Encoder - beat jump backward")
     executeBlockForAllChannel(beatJumpBackward)
+    xmlComment("Position Rotary Encoder - beat jump forward")
+    executeBlockForAllChannel(beatJumpForward)
+    xmlComment("Position Rotary Encoder - loop activate")
+    executeBlockForAllChannel(loopActivate)
     executeBlock(footer)
