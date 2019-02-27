@@ -1,7 +1,7 @@
 #include "common.h"
 
-int channel_deck_a = 1;
-int channel_deck_b = 2;
+int channel_deck_a = 0;
+int channel_deck_b = 0;
 
 
 void p(char *fmt, ... ){
@@ -18,6 +18,16 @@ int getChannelFromDeck(bool deck) {
     return channel_deck_a;
   } else {
     return channel_deck_b;
+  }
+}
+
+void setChannelForDeck(bool deck, int channel) {
+  if((deck == DECK_A && channel_deck_a == channel) || (deck == DECK_B && channel_deck_b == channel)) return;
+  IFDEBUG(p("DECK %s = %i", deck == DECK_A ? "A" : "B", channel));
+  if(deck == DECK_A) {
+    channel_deck_a = channel;
+  } else {
+    channel_deck_b = channel;
   }
 }
 

@@ -1,6 +1,6 @@
 #include "main.h"
 
-const bool BENCHMARK = false;
+const bool BENCHMARK = true;
 
 int BENCH_START_TIME = 0;
 int BENCH_TOTAL_TIME = 0;
@@ -52,34 +52,31 @@ const int count_lr_rotary_encoders = sizeof(lr_rotary_encoders) / sizeof(LRRotar
 // M A T R I X
 int matrix_col_a = A6;
 int matrix_col_b = A7;
-int matrix_col_c = A14;
+int matrix_col_c = A15;
+int matrix_col_d = A14;
+
+int matrix_row_1 = 20;
+int matrix_row_2 = 21;
+int matrix_row_3 = 52;
+int matrix_row_4 = 53;
 
 Button matrix_buttons_col_a[] = {
-  { 20, 50, DECK_B },
-  { 21, 51, DECK_B },
-  { 52,  52, DECK_B },
-  { 53,  53, DECK_B }
+  { matrix_row_1, 50, DECK_B },
+  { matrix_row_2, 51, DECK_B },
+  { matrix_row_3, 52, DECK_B },
+  { matrix_row_4, 53, DECK_B }
 };
 
 const int count_matrix_buttons_col_a = sizeof(matrix_buttons_col_a) / sizeof(Button);
 
 Button matrix_buttons_col_b[] = {
-  { 20, 50, DECK_A },
-  { 21, 51, DECK_A },
-  { 52, 52, DECK_A },
-  { 53, 53, DECK_A },
+  { matrix_row_1, 50, DECK_A },
+  { matrix_row_2, 51, DECK_A },
+  { matrix_row_3, 52, DECK_A },
+  { matrix_row_4, 53, DECK_A }
 };
 
 const int count_matrix_buttons_col_b = sizeof(matrix_buttons_col_b) / sizeof(Button);
-
-Button matrix_buttons_col_c[] = {
-  { 20, 60, DECK_B },
-  { 21, 61, DECK_B },
-  { 52, 62, DECK_B },
-  { 53, 63, DECK_B }
-};
-
-const int count_matrix_buttons_col_c = sizeof(matrix_buttons_col_c) / sizeof(Button);
 
 
 /*************
@@ -117,20 +114,15 @@ void loopLRRotaryEncoders() {
   }
 }
 
-void setupMatrix() {
-  Matrix::setupCol(matrix_col_a);
-  
-  for(int i=0; i<count_matrix_buttons_col_a; i++) {
-    Button* curRowButton = &matrix_buttons_col_a[i];
-    Matrix::setupRow(curRowButton->pin);
-  }
-  
+void setupMatrix() { 
+  Matrix::setupRow(matrix_row_1);
+  Matrix::setupRow(matrix_row_2);
+  Matrix::setupRow(matrix_row_3);
+  Matrix::setupRow(matrix_row_4);
+
+  Matrix::setupCol(matrix_col_a); 
   Matrix::setupCol(matrix_col_b);
-  // put your setup code here, to run once:
-  for(int i=0; i<count_matrix_buttons_col_b; i++) {
-    Button* curRowButton = &matrix_buttons_col_b[i];
-    Matrix::setupRow(curRowButton->pin);
-  }
+  Matrix::setupCol(matrix_col_c);
 }
 
 void loopMatrixButtons(Button buttons[], int count) {
@@ -143,6 +135,30 @@ void loopMatrixButtons(Button buttons[], int count) {
   }  
 }
 
+void loopMatrixChannelSwitches() {
+  int deck_b_is_4 = Matrix::digitalReadRow(matrix_row_1);
+  int deck_b_is_2 = Matrix::digitalReadRow(matrix_row_2);
+
+  int deck_a_is_3 = Matrix::digitalReadRow(matrix_row_3);
+  int deck_a_is_1 = Matrix::digitalReadRow(matrix_row_4);
+
+  if(deck_a_is_1 == false && deck_a_is_3 == false) {
+    setChannelForDeck(DECK_A, 0);
+  } else if(deck_a_is_1 == true) {
+    setChannelForDeck(DECK_A, 1);
+  } else {
+    setChannelForDeck(DECK_A, 3);
+  }
+
+  if(deck_b_is_2 == false && deck_b_is_4 == false) {
+    setChannelForDeck(DECK_B, 0);
+  } else if(deck_b_is_2 == true) {
+    setChannelForDeck(DECK_B, 2);
+  } else {
+    setChannelForDeck(DECK_B, 4);
+  }
+}
+
 void loopMatrix() {
   int curCol = matrix_col_a;
   Matrix::startCol(curCol);
@@ -153,7 +169,13 @@ void loopMatrix() {
   Matrix::startCol(curCol);
   loopMatrixButtons(matrix_buttons_col_b, count_matrix_buttons_col_b);
   Matrix::endCol(curCol);
+  
+  curCol = matrix_col_c;
+  Matrix::startCol(curCol);
+  loopMatrixChannelSwitches();
+  Matrix::endCol(curCol);
 }
+
 
 /*******
  * ARDUINO
