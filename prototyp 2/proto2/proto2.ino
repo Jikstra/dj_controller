@@ -6,7 +6,7 @@
 #include <midi_Settings.h>
 #include <stdarg.h>
 
-const bool DEBUG = true;
+const bool DEBUG = false;
 const bool BENCHMARK = false;
 
 int BENCH_START_TIME = 0;
