@@ -231,9 +231,9 @@ def generateFXRate(parameter, midino):
     def fxRate(ch):
         return('''
             <control>
-                <group>[EffectRack1_EffectUnit''' + str(ch) +  '''_Effect''' + parameter + ''']</group>
+                <group>[EffectRack1_EffectUnit''' + str(ch) +  '''_Effect''' + str(parameter) + ''']</group>
                 <key>meta</key>
-                <description>MIDI Learned from 8 messages.</description>
+                <description>MIDI Learned from 10 messages.</description>
                 <status>0xB''' + str(ch - 1) +  '''</status>
                 <midino>''' + midino + '''</midino>
                 <options>
@@ -243,6 +243,21 @@ def generateFXRate(parameter, midino):
         ''')
     return fxRate
    
+def generateFXKill(parameter, midino):
+    def fxKill(ch):
+        return('''
+            <control>
+                <group>[EffectRack1_EffectUnit''' + str(ch) +  '''_Effect''' + str(parameter) + ''']</group>
+                <key>enabled</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0x9''' + str(ch - 1) +  '''</status>
+                <midino>''' + midino + '''</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        ''')
+    return fxKill
 
 def footer():
     return('''
@@ -315,8 +330,18 @@ if __name__ == "__main__":
     executeBlockForAllChannel(generateEQKill(3, '0x0E'))
 
     xmlComment("Effect 1 Rotary Encoder - Rate")
-    executeBlockForAllChannel(generateEQRate(3, '0x0D'))
+    executeBlockForAllChannel(generateFXRate(1, '0x13'))
     xmlComment("Effect 1 Rotary Encoder - Toggle")
-    executeBlockForAllChannel(generateEQKill(3, '0x0E'))
+    executeBlockForAllChannel(generateFXKill(1, '0x14'))
+
+    xmlComment("Effect 1 Rotary Encoder - Rate")
+    executeBlockForAllChannel(generateFXRate(2, '0x11'))
+    xmlComment("Effect 1 Rotary Encoder - Toggle")
+    executeBlockForAllChannel(generateFXKill(2, '0x12'))
+
+    xmlComment("Effect 1 Rotary Encoder - Rate")
+    executeBlockForAllChannel(generateFXRate(3, '0x0F'))
+    xmlComment("Effect 1 Rotary Encoder - Toggle")
+    executeBlockForAllChannel(generateFXKill(3, '0x10'))
 
     executeBlock(footer)
