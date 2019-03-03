@@ -11,7 +11,7 @@ CountingRotaryEncoder::CountingRotaryEncoder
       int step_size
     ) : 
     RotaryEncoder(rotary_pin_a, button_pin, rotary_pin_b),
-    rotary_counter(63),
+    rotary_counter {63, 63},
    
     control_number_value(control_number_value),
     control_number_mute(control_number_mute),
@@ -19,8 +19,8 @@ CountingRotaryEncoder::CountingRotaryEncoder
     deck(deck),
     step_size(step_size) {}
 
-int CountingRotaryEncoder::_getValueToSend() {
-  int value_to_send = rotary_counter;
+int CountingRotaryEncoder::_getValueToSend(int counter) {
+  int value_to_send = counter;
   if(value_to_send > 127) {
     value_to_send = 127;
   } else if(value_to_send < 0) {
@@ -30,16 +30,20 @@ int CountingRotaryEncoder::_getValueToSend() {
 }
 
 void CountingRotaryEncoder::handleRotaryTurn(bool turnedLeft) {
-  if (turnedLeft == true && rotary_counter < 127) {
-    rotary_counter = rotary_counter + step_size;
-  } else if(turnedLeft == false && rotary_counter > 0)  {
-    rotary_counter = rotary_counter - step_size;
+  int channel = getChannelFromDeck(deck);
+  int channelIndex = getUpperOrLowerChannelIndex(channel);
+
+  int counter = rotary_counter[channelIndex];
+  if (turnedLeft == true) {
+    counter = counter + step_size;
+  } else if(turnedLeft == false)  {
+    counter = counter - step_size;
   } else {
     return;
   }
 
-  int value_to_send = _getValueToSend();
-  int channel = getChannelFromDeck(deck);
+  int value_to_send = _getValueToSend(counter);
+  rotary_counter[channelIndex] = value_to_send;
   
   IFDEBUG(
     p("Rotation: %i:%i %i", control_number_value, channel, value_to_send);  

@@ -8,7 +8,7 @@
 #include "RotaryEncoder.h"
 
 class CountingRotaryEncoder : public RotaryEncoder {
-  int rotary_counter;
+  int rotary_counter[2];
 
   int control_number_value;
   int control_number_mute;
@@ -27,7 +27,7 @@ class CountingRotaryEncoder : public RotaryEncoder {
     );
     void handleRotaryTurn(bool turnedLeft);
     void handleButtonToggle(bool toggle);
-    int _getValueToSend();
+    int _getValueToSend(int counter);
 };
 
 #endif

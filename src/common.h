@@ -13,6 +13,8 @@ extern int channel_deck_b;
 void p(char *fmt, ... );
 int getChannelFromDeck(bool deck);
 void setChannelForDeck(bool deck, int channel);
+int getUpperOrLowerChannelIndex(int channel);
+int getUpperOrLowerChannelIndexFromDeck(bool deck);
 bool isBouncing(unsigned long* last_flake_millis);
 
 enum class ButtonState {Pressed, Unchanged, Unpressed};

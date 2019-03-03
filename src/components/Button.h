@@ -8,9 +8,9 @@
 class Button {
   int control_number;
   const bool deck;
-  unsigned long last_flake;
-  bool was_pressed;
-  bool toggle;
+  unsigned long last_flake[2];
+  bool was_pressed[2];
+  bool toggle[2];
   public:
     int pin;
 
@@ -18,8 +18,6 @@ class Button {
     void setup();
     void process();
     void _process(int state);
-    virtual void handleButtonState(ButtonState button_state);
-    virtual void handleButtonToggle(bool toggle); 
 };
 
 #endif

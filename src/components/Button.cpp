@@ -3,9 +3,9 @@
 Button::Button(int pin, int control_number, bool deck) :
   control_number(control_number),
   deck(deck),
-  last_flake(0),
-  was_pressed(false),
-  toggle(false),
+  last_flake {0, 0},
+  was_pressed {false, false},
+  toggle {false, false},
   pin(pin) {}
 
 
@@ -19,20 +19,15 @@ void Button::process() {
 }
 
 void Button::_process(int pin_value) {
-  ButtonState button_state = buttonState(pin_value, &was_pressed, &last_flake);
-
-  handleButtonState(button_state);
-}
-
-void Button::handleButtonState(ButtonState button_state) {
-  if(buttonToggle(button_state, &toggle)) {
-    handleButtonToggle(toggle);    
-  }
-}
-
-void Button::handleButtonToggle(bool toggle) {
-  int value_to_send = 1;
   int channel = getChannelFromDeck(deck);
+  int channelIndex = getUpperOrLowerChannelIndex(channel);
+  ButtonState button_state = buttonState(pin_value, &was_pressed[channelIndex], &last_flake[channelIndex]);
+
+  if(!buttonToggle(button_state, &toggle[channelIndex])) {
+    return;
+  }
+
+  int value_to_send = 1;
 
   IFDEBUG(p(
     "Button: %i:%i %s %i",
