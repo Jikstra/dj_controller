@@ -21,6 +21,15 @@ int getChannelFromDeck(bool deck) {
   }
 }
 
+int getChannelIndexFromDeck(bool deck) {
+  int channel = getChannelFromDeck(deck);
+  if(channel == 1 || channel == 2) {
+    return 0;
+  } else if(channel == 3 || channel == 4) {
+    return 1;
+  }
+}
+
 void setChannelForDeck(bool deck, int channel) {
   if((deck == DECK_A && channel_deck_a == channel) || (deck == DECK_B && channel_deck_b == channel)) return;
   IFDEBUG(p("DECK %s = %i", deck == DECK_A ? "A" : "B", channel));

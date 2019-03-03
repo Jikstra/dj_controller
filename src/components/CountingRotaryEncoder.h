@@ -5,7 +5,7 @@
 #include "../common.h"
 #include "../midi.h"
 #include "../debug.h"
-#include "RotaryEncoder.h"
+#include "./RotaryEncoder.h"
 
 class CountingRotaryEncoder : public RotaryEncoder {
   int rotary_counter;

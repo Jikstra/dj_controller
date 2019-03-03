@@ -12,6 +12,7 @@ extern int channel_deck_b;
 
 void p(char *fmt, ... );
 int getChannelFromDeck(bool deck);
+int getChannelIndexFromDeck(bool deck);
 void setChannelForDeck(bool deck, int channel);
 bool isBouncing(unsigned long* last_flake_millis);
 

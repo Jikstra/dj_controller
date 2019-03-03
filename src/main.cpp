@@ -60,23 +60,23 @@ int matrix_row_2 = 21;
 int matrix_row_3 = 52;
 int matrix_row_4 = 53;
 
-Button matrix_buttons_col_a[] = {
+MIDIButton matrix_buttons_col_a[] = {
   { matrix_row_1, 50, DECK_B },
   { matrix_row_2, 51, DECK_B },
   { matrix_row_3, 52, DECK_B },
   { matrix_row_4, 53, DECK_B }
 };
 
-const int count_matrix_buttons_col_a = sizeof(matrix_buttons_col_a) / sizeof(Button);
+const int count_matrix_buttons_col_a = sizeof(matrix_buttons_col_a) / sizeof(MIDIButton);
 
-Button matrix_buttons_col_b[] = {
+MIDIButton matrix_buttons_col_b[] = {
   { matrix_row_1, 50, DECK_A },
   { matrix_row_2, 51, DECK_A },
   { matrix_row_3, 52, DECK_A },
   { matrix_row_4, 53, DECK_A }
 };
 
-const int count_matrix_buttons_col_b = sizeof(matrix_buttons_col_b) / sizeof(Button);
+const int count_matrix_buttons_col_b = sizeof(matrix_buttons_col_b) / sizeof(MIDIButton);
 
 
 /*************
@@ -125,13 +125,13 @@ void setupMatrix() {
   Matrix::setupCol(matrix_col_c);
 }
 
-void loopMatrixButtons(Button buttons[], int count) {
+void loopMatrixMIDIButtons(MIDIButton buttons[], int count) {
   for(int i=0; i<count; i++) {
-    Button* curButton = &buttons[i];
+    MIDIButton* curMIDIButton = &buttons[i];
 
-    int curButtonState = Matrix::digitalReadRow(curButton->pin);
+    int curMIDIButtonState = Matrix::digitalReadRow(curMIDIButton->pin);
 
-    curButton->_process(curButtonState);
+    curMIDIButton->_process(curMIDIButtonState);
   }  
 }
 
@@ -162,12 +162,12 @@ void loopMatrixChannelSwitches() {
 void loopMatrix() {
   int curCol = matrix_col_a;
   Matrix::startCol(curCol);
-  loopMatrixButtons(matrix_buttons_col_a, count_matrix_buttons_col_a);
+  loopMatrixMIDIButtons(matrix_buttons_col_a, count_matrix_buttons_col_a);
   Matrix::endCol(curCol);
 
   curCol = matrix_col_b;
   Matrix::startCol(curCol);
-  loopMatrixButtons(matrix_buttons_col_b, count_matrix_buttons_col_b);
+  loopMatrixMIDIButtons(matrix_buttons_col_b, count_matrix_buttons_col_b);
   Matrix::endCol(curCol);
   
   curCol = matrix_col_c;

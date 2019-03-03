@@ -975,6 +975,312 @@
                 </control>
         
 
+
+            <!-- Effect 1 Rotary Encoder - Rate -->
+
+            <control>
+                <group>[EffectRack1_EffectUnit1_Effect1]</group>
+                <key>meta</key>
+                <description>MIDI Learned from 10 messages.</description>
+                <status>0xB0</status>
+                <midino>0x13</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit2_Effect1]</group>
+                <key>meta</key>
+                <description>MIDI Learned from 10 messages.</description>
+                <status>0xB1</status>
+                <midino>0x13</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit3_Effect1]</group>
+                <key>meta</key>
+                <description>MIDI Learned from 10 messages.</description>
+                <status>0xB2</status>
+                <midino>0x13</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit4_Effect1]</group>
+                <key>meta</key>
+                <description>MIDI Learned from 10 messages.</description>
+                <status>0xB3</status>
+                <midino>0x13</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+
+            <!-- Effect 1 Rotary Encoder - Toggle -->
+
+            <control>
+                <group>[EffectRack1_EffectUnit1_Effect1]</group>
+                <key>enabled</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0x90</status>
+                <midino>0x14</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit2_Effect1]</group>
+                <key>enabled</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0x91</status>
+                <midino>0x14</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit3_Effect1]</group>
+                <key>enabled</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0x92</status>
+                <midino>0x14</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit4_Effect1]</group>
+                <key>enabled</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0x93</status>
+                <midino>0x14</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+
+            <!-- Effect 1 Rotary Encoder - Rate -->
+
+            <control>
+                <group>[EffectRack1_EffectUnit1_Effect2]</group>
+                <key>meta</key>
+                <description>MIDI Learned from 10 messages.</description>
+                <status>0xB0</status>
+                <midino>0x11</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit2_Effect2]</group>
+                <key>meta</key>
+                <description>MIDI Learned from 10 messages.</description>
+                <status>0xB1</status>
+                <midino>0x11</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit3_Effect2]</group>
+                <key>meta</key>
+                <description>MIDI Learned from 10 messages.</description>
+                <status>0xB2</status>
+                <midino>0x11</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit4_Effect2]</group>
+                <key>meta</key>
+                <description>MIDI Learned from 10 messages.</description>
+                <status>0xB3</status>
+                <midino>0x11</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+
+            <!-- Effect 1 Rotary Encoder - Toggle -->
+
+            <control>
+                <group>[EffectRack1_EffectUnit1_Effect2]</group>
+                <key>enabled</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0x90</status>
+                <midino>0x12</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit2_Effect2]</group>
+                <key>enabled</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0x91</status>
+                <midino>0x12</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit3_Effect2]</group>
+                <key>enabled</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0x92</status>
+                <midino>0x12</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit4_Effect2]</group>
+                <key>enabled</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0x93</status>
+                <midino>0x12</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+
+            <!-- Effect 1 Rotary Encoder - Rate -->
+
+            <control>
+                <group>[EffectRack1_EffectUnit1_Effect3]</group>
+                <key>meta</key>
+                <description>MIDI Learned from 10 messages.</description>
+                <status>0xB0</status>
+                <midino>0x0F</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit2_Effect3]</group>
+                <key>meta</key>
+                <description>MIDI Learned from 10 messages.</description>
+                <status>0xB1</status>
+                <midino>0x0F</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit3_Effect3]</group>
+                <key>meta</key>
+                <description>MIDI Learned from 10 messages.</description>
+                <status>0xB2</status>
+                <midino>0x0F</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit4_Effect3]</group>
+                <key>meta</key>
+                <description>MIDI Learned from 10 messages.</description>
+                <status>0xB3</status>
+                <midino>0x0F</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+
+            <!-- Effect 1 Rotary Encoder - Toggle -->
+
+            <control>
+                <group>[EffectRack1_EffectUnit1_Effect3]</group>
+                <key>enabled</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0x90</status>
+                <midino>0x10</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit2_Effect3]</group>
+                <key>enabled</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0x91</status>
+                <midino>0x10</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit3_Effect3]</group>
+                <key>enabled</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0x92</status>
+                <midino>0x10</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
+            <control>
+                <group>[EffectRack1_EffectUnit4_Effect3]</group>
+                <key>enabled</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0x93</status>
+                <midino>0x10</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        
+
         </controls>
         <outputs/>
     </controller>

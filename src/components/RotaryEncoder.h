@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <Rotary.h>
 
-#include "common.h"
+#include "../common.h"
 
 class RotaryEncoder {
 
