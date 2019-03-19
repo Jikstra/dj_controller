@@ -3,6 +3,7 @@
 int channel_deck_a = 0;
 int channel_deck_b = 0;
 
+unsigned int step_size = 1;
 
 void p(char *fmt, ... ){
   char buf[128]; // resulting string limited to 128 chars
@@ -86,4 +87,14 @@ bool buttonToggle(ButtonState button_state, bool* toggle) {
     return true;
   }
   return false;
+}
+
+void setStepSize(unsigned int new_step_size) {
+  if(step_size == new_step_size) return;
+  IFDEBUG(p("Set step size: %i", new_step_size));
+  step_size = new_step_size;
+}
+
+unsigned int getStepSize() {
+  return step_size;
 }

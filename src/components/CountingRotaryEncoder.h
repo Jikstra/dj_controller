@@ -14,7 +14,6 @@ class CountingRotaryEncoder : public RotaryEncoder {
   int control_number_mute;
   
   bool deck;
-  int step_size;
   public:
     CountingRotaryEncoder(
       int rotary_pin_a, 
@@ -22,8 +21,7 @@ class CountingRotaryEncoder : public RotaryEncoder {
       int rotary_pin_b, 
       int control_number_value, 
       int control_number_mute, 
-      bool deck, 
-      int step_size
+      bool deck 
     );
     void handleRotaryTurn(bool turnedLeft);
     void handleButtonToggle(bool toggle);

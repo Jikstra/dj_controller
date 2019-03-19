@@ -14,24 +14,24 @@ int BENCH_MAX_TOTAL = 0;
 // C O U N T I N G  R O T A R Y  E N C O D E R S
 CountingRotaryEncoder counting_rotary_encoders[] = {
   // DECK A
-  {   8,   9,  10,  5,  6, DECK_A, 4 },
-  {  11,  12,  13,  7,  8, DECK_A, 4 },
-  {  A0,  A1,  A2,  9, 10, DECK_A, 4 },
-  {  A3,  A4,  A5, 11, 12, DECK_A, 4 },
-  {  A8,  A9, A10, 13, 14, DECK_A, 4 },
-  { A11, A12, A13, 15, 16, DECK_A, 4 },
-  {  14,  15,  16, 17, 18, DECK_A, 4 },
-  {  17,  18,  19, 19, 20, DECK_A, 4 },
+  {   8,   9,  10,  5,  6, DECK_A },
+  {  11,  12,  13,  7,  8, DECK_A },
+  {  A0,  A1,  A2,  9, 10, DECK_A },
+  {  A3,  A4,  A5, 11, 12, DECK_A },
+  {  A8,  A9, A10, 13, 14, DECK_A },
+  { A11, A12, A13, 15, 16, DECK_A },
+  {  14,  15,  16, 17, 18, DECK_A },
+  {  17,  18,  19, 19, 20, DECK_A },
   
   // DECK B
-  {  28,  30,  32,  5,  6, DECK_B, 4 },
-  {  29,  31,  33,  7,  8, DECK_B, 4 },
-  {  34,  36,  38,  9, 10, DECK_B, 4 },
-  {  35,  37,  39, 11, 12, DECK_B, 4 },
-  {  40,  42,  44, 13, 14, DECK_B, 4 },
-  {  41,  43,  45, 15, 16, DECK_B, 4 },
-  {  46,  48,  50, 17, 18, DECK_B, 4 },
-  {  47,  49,  51, 19, 20, DECK_B, 4 }
+  {  28,  30,  32,  5,  6, DECK_B },
+  {  29,  31,  33,  7,  8, DECK_B },
+  {  34,  36,  38,  9, 10, DECK_B },
+  {  35,  37,  39, 11, 12, DECK_B },
+  {  40,  42,  44, 13, 14, DECK_B },
+  {  41,  43,  45, 15, 16, DECK_B },
+  {  46,  48,  50, 17, 18, DECK_B },
+  {  47,  49,  51, 19, 20, DECK_B }
 };
 
 const int count_counting_rotary_encoders = sizeof(counting_rotary_encoders) / sizeof(CountingRotaryEncoder);
@@ -52,8 +52,8 @@ const int count_lr_rotary_encoders = sizeof(lr_rotary_encoders) / sizeof(LRRotar
 // M A T R I X
 int matrix_col_a = A6;
 int matrix_col_b = A7;
-int matrix_col_c = A15;
-int matrix_col_d = A14;
+int matrix_col_c = A14;
+int matrix_col_d = A15;
 
 int matrix_row_1 = 20;
 int matrix_row_2 = 21;
@@ -136,26 +136,31 @@ void loopMatrixButtons(Button buttons[], int count) {
 }
 
 void loopMatrixChannelSwitches() {
-  int deck_b_is_4 = Matrix::digitalReadRow(matrix_row_1);
-  int deck_b_is_2 = Matrix::digitalReadRow(matrix_row_2);
-
-  int deck_a_is_3 = Matrix::digitalReadRow(matrix_row_3);
-  int deck_a_is_1 = Matrix::digitalReadRow(matrix_row_4);
-
-  if(deck_a_is_1 == false && deck_a_is_3 == false) {
-    setChannelForDeck(DECK_A, 0);
-  } else if(deck_a_is_1 == true) {
+  int deck_a_is_first = Matrix::digitalReadRow(matrix_row_1);
+  
+  if(deck_a_is_first) {
     setChannelForDeck(DECK_A, 1);
   } else {
     setChannelForDeck(DECK_A, 3);
   }
 
-  if(deck_b_is_2 == false && deck_b_is_4 == false) {
-    setChannelForDeck(DECK_B, 0);
-  } else if(deck_b_is_2 == true) {
+  int deck_b_is_first = Matrix::digitalReadRow(matrix_row_2);
+
+  if(deck_b_is_first) {
     setChannelForDeck(DECK_B, 2);
   } else {
     setChannelForDeck(DECK_B, 4);
+  }
+
+  int step_size_is_one = Matrix::digitalReadRow(matrix_row_3);
+  int step_size_is_four = Matrix::digitalReadRow(matrix_row_4);
+
+  if(step_size_is_one) {
+    setStepSize(1);
+  } else if(step_size_is_four) {
+    setStepSize(4);
+  } else {
+    setStepSize(2);
   }
 }
 
