@@ -14,24 +14,24 @@ int BENCH_MAX_TOTAL = 0;
 // C O U N T I N G  R O T A R Y  E N C O D E R S
 CountingRotaryEncoder counting_rotary_encoders[] = {
   // DECK A
-  {   8,   9,  10,  5,  6, DECK_A },
-  {  11,  12,  13,  7,  8, DECK_A },
-  {  A0,  A1,  A2,  9, 10, DECK_A },
-  {  A3,  A4,  A5, 11, 12, DECK_A },
-  {  A8,  A9, A10, 13, 14, DECK_A },
-  { A11, A12, A13, 15, 16, DECK_A },
-  {  14,  15,  16, 17, 18, DECK_A },
-  {  17,  18,  19, 19, 20, DECK_A },
+  {   8,   9,  10,  5,  6, DECK_B },
+  {  11,  12,  13,  7,  8, DECK_B },
+  {  A0,  A1,  A2,  9, 10, DECK_B },
+  {  A3,  A4,  A5, 11, 12, DECK_B },
+  {  A8,  A9, A10, 13, 14, DECK_B },
+  { A11, A12, A13, 15, 16, DECK_B },
+  {  14,  15,  16, 17, 18, DECK_B },
+  {  17,  18,  19, 19, 20, DECK_B },
   
   // DECK B
-  {  28,  30,  32,  5,  6, DECK_B },
-  {  29,  31,  33,  7,  8, DECK_B },
-  {  34,  36,  38,  9, 10, DECK_B },
-  {  35,  37,  39, 11, 12, DECK_B },
-  {  40,  42,  44, 13, 14, DECK_B },
-  {  41,  43,  45, 15, 16, DECK_B },
-  {  46,  48,  50, 17, 18, DECK_B },
-  {  47,  49,  51, 19, 20, DECK_B }
+  {  28,  30,  32,  5,  6, DECK_A },
+  {  29,  31,  33,  7,  8, DECK_A },
+  {  34,  36,  38,  9, 10, DECK_A },
+  {  35,  37,  39, 11, 12, DECK_A },
+  {  40,  42,  44, 13, 14, DECK_A },
+  {  41,  43,  45, 15, 16, DECK_A },
+  {  46,  48,  50, 17, 18, DECK_A },
+  {  47,  49,  51, 19, 20, DECK_A }
 };
 
 const int count_counting_rotary_encoders = sizeof(counting_rotary_encoders) / sizeof(CountingRotaryEncoder);
@@ -39,12 +39,12 @@ const int count_counting_rotary_encoders = sizeof(counting_rotary_encoders) / si
 // L R  R O T A R Y  E N C O D E R S
 LRRotaryEncoder lr_rotary_encoders[] = {
   // DECK A
-  {   2,   3,   4,  31,  32, 33, 33, DECK_A },
-  {   5,   6,   7,  36,  37, 38, 38, DECK_A },
+  {   2,   3,   4,  31,  32, 33, 33, DECK_B },
+  {   5,   6,   7,  36,  37, 38, 38, DECK_B },
 
   // DECK B
-  {  22,  24,  26,  31,  32, 33, 33, DECK_B },
-  {  23,  25,  27,  36,  37, 38, 38, DECK_B },
+  {  22,  24,  26,  31,  32, 33, 33, DECK_A },
+  {  23,  25,  27,  36,  37, 38, 38, DECK_A },
 };
 
 const int count_lr_rotary_encoders = sizeof(lr_rotary_encoders) / sizeof(LRRotaryEncoder);
