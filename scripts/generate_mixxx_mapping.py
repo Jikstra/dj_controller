@@ -41,10 +41,10 @@ def beatSyncButton(ch):
 def headphoneListenButton(ch):
     return('''
             <control>
-                <group>[Channel2]</group>
+                <group>[Channel''' + str(ch) +  ''']</group>
                 <key>pfl</key>
                 <description>MIDI Learned from 1 messages.</description>
-                <status>0x90</status>
+                <status>0x9''' + str(ch - 1) +  '''</status>
                 <midino>0x34</midino>
                 <options>
                     <normal/>
