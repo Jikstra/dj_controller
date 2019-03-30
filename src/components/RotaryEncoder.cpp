@@ -26,7 +26,7 @@ void RotaryEncoder::processRotary() {
   unsigned char result = rotary.process();
   
   if (result == DIR_NONE) return;
-  handleRotaryTurn(result == DIR_CCW);
+  handleRotaryTurn(result == DIR_CW);
 }
 
 void RotaryEncoder::handleRotaryTurn(bool turnedLeft) {}

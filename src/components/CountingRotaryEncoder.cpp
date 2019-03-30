@@ -18,6 +18,25 @@ CountingRotaryEncoder::CountingRotaryEncoder
     deck(deck)
     {}
 
+CountingRotaryEncoder::CountingRotaryEncoder
+    (
+      int rotary_pin_a,
+      int button_pin,
+      int rotary_pin_b,
+      int control_number_value,
+      int control_number_mute,
+      bool deck,
+      int initial_count
+    ) :
+    RotaryEncoder(rotary_pin_a, button_pin, rotary_pin_b),
+    rotary_counter {initial_count, initial_count},
+   
+    control_number_value(control_number_value),
+    control_number_mute(control_number_mute),
+    
+    deck(deck)
+    {}
+
 int CountingRotaryEncoder::_getValueToSend(int counter) {
   int value_to_send = counter;
   if(value_to_send > 127) {
@@ -36,9 +55,9 @@ void CountingRotaryEncoder::handleRotaryTurn(bool turnedLeft) {
 
   int counter = rotary_counter[channelIndex];
   if (turnedLeft == true) {
-    counter = counter + step_size;
-  } else if(turnedLeft == false)  {
     counter = counter - step_size;
+  } else if(turnedLeft == false)  {
+    counter = counter + step_size;
   } else {
     return;
   }

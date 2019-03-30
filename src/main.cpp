@@ -14,8 +14,8 @@ int BENCH_MAX_TOTAL = 0;
 // C O U N T I N G  R O T A R Y  E N C O D E R S
 CountingRotaryEncoder counting_rotary_encoders[] = {
   // DECK A
-  {   8,   9,  10,  5,  6, DECK_B },
-  {  11,  12,  13,  7,  8, DECK_B },
+  {   8,   9,  10,  5,  6, DECK_B, 127 },
+  {  11,  12,  13,  7,  8, DECK_B, 127 },
   {  A0,  A1,  A2,  9, 10, DECK_B },
   {  A3,  A4,  A5, 11, 12, DECK_B },
   {  A8,  A9, A10, 13, 14, DECK_B },
@@ -24,8 +24,8 @@ CountingRotaryEncoder counting_rotary_encoders[] = {
   {  17,  18,  19, 19, 20, DECK_B },
   
   // DECK B
-  {  28,  30,  32,  5,  6, DECK_A },
-  {  29,  31,  33,  7,  8, DECK_A },
+  {  28,  30,  32,  5,  6, DECK_A, 127 },
+  {  29,  31,  33,  7,  8, DECK_A, 127 },
   {  34,  36,  38,  9, 10, DECK_A },
   {  35,  37,  39, 11, 12, DECK_A },
   {  40,  42,  44, 13, 14, DECK_A },
