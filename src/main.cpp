@@ -11,10 +11,20 @@ int BENCH_MAX_TOTAL = 0;
  * START PIN LAYOUT
  *************/
 
+// V O L U M E   C O U N T I N G  R O T A R Y  E N C O D E R S
+VolumeCountingRotaryEncoder volume_counting_rotary_encoders[] = {
+  // DECK A
+  { 8,   9,  10,  5,  6, DECK_B },
+  
+  // DECK B
+  { 28,  30,  32,  5,  6, DECK_A }
+};
+
+const int count_volume_counting_rotary_encoders = sizeof(volume_counting_rotary_encoders) / sizeof(VolumeCountingRotaryEncoder);
+
 // C O U N T I N G  R O T A R Y  E N C O D E R S
 CountingRotaryEncoder counting_rotary_encoders[] = {
   // DECK A
-  {   8,   9,  10,  5,  6, DECK_B, 127 },
   {  11,  12,  13,  7,  8, DECK_B, 127 },
   {  A0,  A1,  A2,  9, 10, DECK_B },
   {  A3,  A4,  A5, 11, 12, DECK_B },
@@ -24,7 +34,6 @@ CountingRotaryEncoder counting_rotary_encoders[] = {
   {  17,  18,  19, 19, 20, DECK_B },
   
   // DECK B
-  {  28,  30,  32,  5,  6, DECK_A, 127 },
   {  29,  31,  33,  7,  8, DECK_A, 127 },
   {  34,  36,  38,  9, 10, DECK_A },
   {  35,  37,  39, 11, 12, DECK_A },
@@ -83,7 +92,24 @@ const int count_matrix_buttons_col_b = sizeof(matrix_buttons_col_b) / sizeof(But
  * END PIN LAYOUT
  *************/
 
-void setupKnobs() {
+
+void setupVolumeCountingRotaryEncoders() {
+  for(int i = 0; i < count_volume_counting_rotary_encoders; i++) {
+    // Rotation
+    VolumeCountingRotaryEncoder* volume_roti = &volume_counting_rotary_encoders[i];
+    volume_roti->setup();
+  }
+}
+
+void loopVolumeCountingRotaryEncoders() {
+  for(int i = 0; i < count_volume_counting_rotary_encoders; i++) {
+    // Rotation
+    VolumeCountingRotaryEncoder* volume_roti = &volume_counting_rotary_encoders[i];
+    volume_roti->process();
+  }
+}
+
+void setupCountingRotaryEncoders() {
   for(int i = 0; i < count_counting_rotary_encoders; i++) {
     // Rotation
     CountingRotaryEncoder* knob = &counting_rotary_encoders[i];
@@ -91,7 +117,7 @@ void setupKnobs() {
   }
 }
 
-void loopKnobs() {
+void loopCountingRotaryEncoders() {
   for(int i = 0; i < count_counting_rotary_encoders; i++) {
     // Rotation
     //p("test1 %i", i);
@@ -191,7 +217,8 @@ void setup()
 {
   Serial.begin(115200);
 
-  setupKnobs();
+  setupVolumeCountingRotaryEncoders();
+  setupCountingRotaryEncoders();
   setupLRRotaryEncoders();
   setupMatrix();
 
@@ -200,7 +227,8 @@ void setup()
 
 void loop()
 {
-  loopKnobs();
+  loopVolumeCountingRotaryEncoders();
+  loopCountingRotaryEncoders();
   loopLRRotaryEncoders();
   loopMatrix();
   

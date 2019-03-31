@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "components/Button.h"
+#include "components/VolumeCountingRotaryEncoder.h"
 #include "components/CountingRotaryEncoder.h"
 #include "components/LRRotaryEncoder.h"
 #include "components/Matrix.h"

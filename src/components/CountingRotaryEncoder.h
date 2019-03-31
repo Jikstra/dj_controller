@@ -8,13 +8,13 @@
 #include "RotaryEncoder.h"
 
 class CountingRotaryEncoder : public RotaryEncoder {
-  int rotary_counter[2];
-
-  int control_number_value;
-  int control_number_mute;
-  
-  bool deck;
   public:
+    int rotary_counter[2];
+
+    int control_number_value;
+    int control_number_mute;
+    
+    bool deck;
     CountingRotaryEncoder(
       int rotary_pin_a, 
       int button_pin,

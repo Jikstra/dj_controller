@@ -54,13 +54,7 @@ void CountingRotaryEncoder::handleRotaryTurn(bool turnedLeft) {
   unsigned int step_size = getStepSize();
 
   int counter = rotary_counter[channelIndex];
-  if (turnedLeft == true) {
-    counter = counter - step_size;
-  } else if(turnedLeft == false)  {
-    counter = counter + step_size;
-  } else {
-    return;
-  }
+  counter = turnedLeft ? counter - step_size : counter + step_size;
 
   int value_to_send = _getValueToSend(counter);
   rotary_counter[channelIndex] = value_to_send;
