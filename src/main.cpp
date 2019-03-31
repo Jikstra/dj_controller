@@ -25,7 +25,6 @@ const int count_volume_counting_rotary_encoders = sizeof(volume_counting_rotary_
 // C O U N T I N G  R O T A R Y  E N C O D E R S
 CountingRotaryEncoder counting_rotary_encoders[] = {
   // DECK A
-  {  11,  12,  13,  7,  8, DECK_B, 127 },
   {  A0,  A1,  A2,  9, 10, DECK_B },
   {  A3,  A4,  A5, 11, 12, DECK_B },
   {  A8,  A9, A10, 13, 14, DECK_B },
@@ -34,7 +33,6 @@ CountingRotaryEncoder counting_rotary_encoders[] = {
   {  17,  18,  19, 19, 20, DECK_B },
   
   // DECK B
-  {  29,  31,  33,  7,  8, DECK_A, 127 },
   {  34,  36,  38,  9, 10, DECK_A },
   {  35,  37,  39, 11, 12, DECK_A },
   {  40,  42,  44, 13, 14, DECK_A },
@@ -50,10 +48,12 @@ LRRotaryEncoder lr_rotary_encoders[] = {
   // DECK A
   {   2,   3,   4,  31,  32, 33, 33, DECK_B },
   {   5,   6,   7,  36,  37, 38, 38, DECK_B },
+  {  11,  12,  13,  39,  40, 41, 42, DECK_B },
 
   // DECK B
   {  22,  24,  26,  31,  32, 33, 33, DECK_A },
   {  23,  25,  27,  36,  37, 38, 38, DECK_A },
+  {  29,  31,  33,  39,  40, 41, 42, DECK_A },
 };
 
 const int count_lr_rotary_encoders = sizeof(lr_rotary_encoders) / sizeof(LRRotaryEncoder);

@@ -166,20 +166,32 @@ def volumeKill(ch):
             </control>
     ''')
 
-
-def tempoRate(ch):
+def tempoUp(ch):
     return('''
             <control>
                 <group>[Channel''' + str(ch) +  ''']</group>
-                <key>rate</key>
-                <description>MIDI Learned from 4 messages.</description>
+                <key>rate_perm_up_small</key>
+                <description>MIDI Learned from 1 messages.</description>
                 <status>0xB''' + str(ch - 1) +  '''</status>
-                <midino>0x07</midino>
+                <midino>0x28</midino>
                 <options>
                     <normal/>
                 </options>
             </control>
-    ''')
+        ''')
+def tempoDown(ch):
+    return('''
+            <control>
+                <group>[Channel''' + str(ch) +  ''']</group>
+                <key>rate_perm_down_small</key>
+                <description>MIDI Learned from 1 messages.</description>
+                <status>0xB''' + str(ch - 1) +  '''</status>
+                <midino>0x27</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+        ''')
 
 def tempoReset(ch):
     return('''
@@ -188,7 +200,17 @@ def tempoReset(ch):
                 <key>rate_set_default</key>
                 <description>MIDI Learned from 2 messages.</description>
                 <status>0x9''' + str(ch - 1) +  '''</status>
-                <midino>0x08</midino>
+                <midino>0x29</midino>
+                <options>
+                    <switch/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel''' + str(ch) +  ''']</group>
+                <key>rate_set_default</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0x9''' + str(ch - 1) +  '''</status>
+                <midino>0x2A</midino>
                 <options>
                     <switch/>
                 </options>
@@ -310,7 +332,8 @@ if __name__ == "__main__":
     executeBlockForAllChannel(volumeKill)
     
     xmlComment("Tempo Rotary Encoder - Rate")
-    executeBlockForAllChannel(tempoRate)
+    executeBlockForAllChannel(tempoUp)
+    executeBlockForAllChannel(tempoDown)
     xmlComment("Tempo Rotary Encoder - Reset")
     executeBlockForAllChannel(tempoReset)
 
