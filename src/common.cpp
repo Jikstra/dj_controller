@@ -56,11 +56,11 @@ bool isBouncing(unsigned long* last_flake_millis) {
 
 ButtonState buttonState(int pin_value, bool* was_pressed,  unsigned long* last_flake_millis) {
   if(pin_value == LOW && *was_pressed == false) {
-    if(isBouncing(last_flake_millis)) return;
+    if(isBouncing(last_flake_millis)) return ButtonState::Unchanged;
     *was_pressed = true;
     return ButtonState::Pressed;
   } else if(pin_value == HIGH && *was_pressed == true){
-    if(isBouncing(last_flake_millis)) return;
+    if(isBouncing(last_flake_millis)) return ButtonState::Unchanged;
     *was_pressed = false;
     return ButtonState::Unpressed;
   } else {
@@ -77,7 +77,9 @@ char* buttonStateToString(ButtonState button_state) {
     case ButtonState::Unpressed:
       return "Unpressed";
     default:
+      IFDEBUG(p("Invalid: %i", button_state));
       return "Invalid Enum";
+      
   }
 }
 

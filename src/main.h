@@ -8,6 +8,8 @@
 #include "components/VolumeCountingRotaryEncoder.h"
 #include "components/CountingRotaryEncoder.h"
 #include "components/LRRotaryEncoder.h"
+#include "components/PositionKnob.h"
+#include "components/LoopKnob.h"
 #include "components/Matrix.h"
 
 #endif

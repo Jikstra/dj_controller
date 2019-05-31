@@ -160,14 +160,65 @@
     
 
 
-            <!-- Position Rotary Encoder - beat jump backward -->
+            <!-- Quantize Button -->
 
             <control>
                 <group>[Channel1]</group>
-                <key>beatjump_backward</key>
+                <key>quantize</key>
+                <description>MIDI Learned from 1 messages.</description>
+                <status>0x90</status>
+                <midino>0x35</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel2]</group>
+                <key>quantize</key>
+                <description>MIDI Learned from 1 messages.</description>
+                <status>0x91</status>
+                <midino>0x35</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel3]</group>
+                <key>quantize</key>
+                <description>MIDI Learned from 1 messages.</description>
+                <status>0x92</status>
+                <midino>0x35</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel4]</group>
+                <key>quantize</key>
+                <description>MIDI Learned from 1 messages.</description>
+                <status>0x93</status>
+                <midino>0x35</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    
+
+
+            <!-- Position Knob - beat jump backward -->
+
+            <control>
+                <group>[Channel1]</group>
+                <key>beatjump_0.0625_backward</key>
                 <description>MIDI Learned from 6 messages.</description>
                 <status>0xB0</status>
-                <midino>0x20</midino>
+                <midino>0x44</midino>
                 <options>
                     <selectknob/>
                 </options>
@@ -176,10 +227,10 @@
 
             <control>
                 <group>[Channel2]</group>
-                <key>beatjump_backward</key>
+                <key>beatjump_0.0625_backward</key>
                 <description>MIDI Learned from 6 messages.</description>
                 <status>0xB1</status>
-                <midino>0x20</midino>
+                <midino>0x44</midino>
                 <options>
                     <selectknob/>
                 </options>
@@ -188,10 +239,10 @@
 
             <control>
                 <group>[Channel3]</group>
-                <key>beatjump_backward</key>
+                <key>beatjump_0.0625_backward</key>
                 <description>MIDI Learned from 6 messages.</description>
                 <status>0xB2</status>
-                <midino>0x20</midino>
+                <midino>0x44</midino>
                 <options>
                     <selectknob/>
                 </options>
@@ -200,10 +251,10 @@
 
             <control>
                 <group>[Channel4]</group>
-                <key>beatjump_backward</key>
+                <key>beatjump_0.0625_backward</key>
                 <description>MIDI Learned from 6 messages.</description>
                 <status>0xB3</status>
-                <midino>0x20</midino>
+                <midino>0x44</midino>
                 <options>
                     <selectknob/>
                 </options>
@@ -211,14 +262,14 @@
     
 
 
-            <!-- Position Rotary Encoder - beat jump forward -->
+            <!-- Position Knob - beat jump forward -->
 
             <control>
                 <group>[Channel1]</group>
-                <key>beatjump_forward</key>
+                <key>beatjump_0.0625_forward</key>
                 <description>MIDI Learned from 2 messages.</description>
                 <status>0xB0</status>
-                <midino>0x1F</midino>
+                <midino>0x43</midino>
                 <options>
                     <selectknob/>
                 </options>
@@ -227,10 +278,10 @@
 
             <control>
                 <group>[Channel2]</group>
-                <key>beatjump_forward</key>
+                <key>beatjump_0.0625_forward</key>
                 <description>MIDI Learned from 2 messages.</description>
                 <status>0xB1</status>
-                <midino>0x1F</midino>
+                <midino>0x43</midino>
                 <options>
                     <selectknob/>
                 </options>
@@ -239,10 +290,10 @@
 
             <control>
                 <group>[Channel3]</group>
-                <key>beatjump_forward</key>
+                <key>beatjump_0.0625_forward</key>
                 <description>MIDI Learned from 2 messages.</description>
                 <status>0xB2</status>
-                <midino>0x1F</midino>
+                <midino>0x43</midino>
                 <options>
                     <selectknob/>
                 </options>
@@ -251,10 +302,10 @@
 
             <control>
                 <group>[Channel4]</group>
-                <key>beatjump_forward</key>
+                <key>beatjump_0.0625_forward</key>
                 <description>MIDI Learned from 2 messages.</description>
                 <status>0xB3</status>
-                <midino>0x1F</midino>
+                <midino>0x43</midino>
                 <options>
                     <selectknob/>
                 </options>
@@ -262,7 +313,7 @@
     
 
 
-            <!-- Position Rotary Encoder - toggle loop -->
+            <!-- Position Knob - toggle loop -->
 
             <control>
                 <group>[Channel1]</group>
@@ -311,6 +362,104 @@
                 </options>
             </control>
     
+
+
+            <!-- Position Knob - temporary decrease tempo -->
+
+            <control>
+                <group>[Channel1]</group>
+                <key>rate_temp_down</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0x90</status>
+                <midino>0x41</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel2]</group>
+                <key>rate_temp_down</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0x91</status>
+                <midino>0x41</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel3]</group>
+                <key>rate_temp_down</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0x92</status>
+                <midino>0x41</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel4]</group>
+                <key>rate_temp_down</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0x93</status>
+                <midino>0x41</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    
+
+
+            <!-- Loop & Position Knob - sync beatgrid with cur position -->
+
+            <control>
+                <group>[Channel1]</group>
+                <key>beats_translate_match_alignment</key>
+                <description>MIDI Learned from 1 messages.</description>
+                <status>0x90</status>
+                <midino>0x42</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+
+            <control>
+                <group>[Channel2]</group>
+                <key>beats_translate_match_alignment</key>
+                <description>MIDI Learned from 1 messages.</description>
+                <status>0x91</status>
+                <midino>0x42</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+
+            <control>
+                <group>[Channel3]</group>
+                <key>beats_translate_match_alignment</key>
+                <description>MIDI Learned from 1 messages.</description>
+                <status>0x92</status>
+                <midino>0x42</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+
+            <control>
+                <group>[Channel4]</group>
+                <key>beats_translate_match_alignment</key>
+                <description>MIDI Learned from 1 messages.</description>
+                <status>0x93</status>
+                <midino>0x42</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
 
 
             <!-- Loop Rotary Encoder - halve loop -->
@@ -459,6 +608,159 @@
                 <description>MIDI Learned from 1 messages.</description>
                 <status>0x93</status>
                 <midino>0x26</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    
+
+
+            <!-- Loop Knob - beat jump backward -->
+
+            <control>
+                <group>[Channel1]</group>
+                <key>beatjump_0.125_backward</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0xB0</status>
+                <midino>0x4e</midino>
+                <options>
+                    <selectknob/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel2]</group>
+                <key>beatjump_0.125_backward</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0xB1</status>
+                <midino>0x4e</midino>
+                <options>
+                    <selectknob/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel3]</group>
+                <key>beatjump_0.125_backward</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0xB2</status>
+                <midino>0x4e</midino>
+                <options>
+                    <selectknob/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel4]</group>
+                <key>beatjump_0.125_backward</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0xB3</status>
+                <midino>0x4e</midino>
+                <options>
+                    <selectknob/>
+                </options>
+            </control>
+    
+
+
+            <!-- Loop Knob - beat jump forward -->
+
+            <control>
+                <group>[Channel1]</group>
+                <key>beatjump_0.125_forward</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0xB0</status>
+                <midino>0x4d</midino>
+                <options>
+                    <selectknob/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel2]</group>
+                <key>beatjump_0.125_forward</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0xB1</status>
+                <midino>0x4d</midino>
+                <options>
+                    <selectknob/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel3]</group>
+                <key>beatjump_0.125_forward</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0xB2</status>
+                <midino>0x4d</midino>
+                <options>
+                    <selectknob/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel4]</group>
+                <key>beatjump_0.125_forward</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0xB3</status>
+                <midino>0x4d</midino>
+                <options>
+                    <selectknob/>
+                </options>
+            </control>
+    
+
+
+            <!-- Position Knob - temporary increase tempo -->
+
+            <control>
+                <group>[Channel1]</group>
+                <key>rate_temp_up</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0x90</status>
+                <midino>0x4b</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel2]</group>
+                <key>rate_temp_up</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0x91</status>
+                <midino>0x4b</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel3]</group>
+                <key>rate_temp_up</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0x92</status>
+                <midino>0x4b</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    
+
+            <control>
+                <group>[Channel4]</group>
+                <key>rate_temp_up</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0x93</status>
+                <midino>0x4b</midino>
                 <options>
                     <normal/>
                 </options>

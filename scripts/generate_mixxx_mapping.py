@@ -52,6 +52,19 @@ def headphoneListenButton(ch):
             </control>
     ''')
 
+def quantizeButton(ch):
+    return('''
+            <control>
+                <group>[Channel''' + str(ch) +  ''']</group>
+                <key>quantize</key>
+                <description>MIDI Learned from 1 messages.</description>
+                <status>0x9''' + str(ch - 1) +  '''</status>
+                <midino>0x35</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    ''')
 
 def beatJumpForward(ch):
     return('''
@@ -81,6 +94,74 @@ def beatJumpBackward(ch):
             </control>
     ''')
 
+def beatJumpForwardSmaller(ch):
+    return('''
+            <control>
+                <group>[Channel''' + str(ch) +  ''']</group>
+                <key>beatjump_0.0625_forward</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0xB''' + str(ch - 1) +  '''</status>
+                <midino>''' + hex(67) + '''</midino>
+                <options>
+                    <selectknob/>
+                </options>
+            </control>
+    ''')
+def beatJumpForwardSmall(ch):
+    return('''
+            <control>
+                <group>[Channel''' + str(ch) +  ''']</group>
+                <key>beatjump_0.125_forward</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0xB''' + str(ch - 1) +  '''</status>
+                <midino>''' + hex(77) + '''</midino>
+                <options>
+                    <selectknob/>
+                </options>
+            </control>
+    ''')
+
+def beatJumpBackwardSmaller(ch):
+    return('''
+            <control>
+                <group>[Channel''' + str(ch) +  ''']</group>
+                <key>beatjump_0.0625_backward</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0xB''' + str(ch - 1) +  '''</status>
+                <midino>''' + hex(68) + '''</midino>
+                <options>
+                    <selectknob/>
+                </options>
+            </control>
+    ''')
+
+def beatJumpBackwardSmall(ch):
+    return('''
+            <control>
+                <group>[Channel''' + str(ch) +  ''']</group>
+                <key>beatjump_0.125_backward</key>
+                <description>MIDI Learned from 6 messages.</description>
+                <status>0xB''' + str(ch - 1) +  '''</status>
+                <midino>''' + hex(78) + '''</midino>
+                <options>
+                    <selectknob/>
+                </options>
+            </control>
+    ''')
+    
+def syncBeatGridWithCurPosition(ch):
+    return('''
+            <control>
+                <group>[Channel''' + str(ch) +  ''']</group>
+                <key>beats_translate_match_alignment</key>
+                <description>MIDI Learned from 1 messages.</description>
+                <status>0x9''' + str(ch - 1) +  '''</status>
+                <midino>''' + hex(66) + '''</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>''')
+
 def reloopToggle(ch):
     return('''
             <control>
@@ -89,6 +170,48 @@ def reloopToggle(ch):
                 <description>MIDI Learned from 10 messages.</description>
                 <status>0x9''' + str(ch - 1) +  '''</status>
                 <midino>0x21</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    ''')
+
+def rateTempDownSmall(ch):
+    return('''
+            <control>
+                <group>[Channel''' + str(ch) +  ''']</group>
+                <key>rate_temp_down</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0x9''' + str(ch - 1) +  '''</status>
+                <midino>''' + hex(65) +  '''</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    ''')
+
+def rateTempUpSmall(ch):
+    return('''
+            <control>
+                <group>[Channel''' + str(ch) +  ''']</group>
+                <key>rate_temp_up</key>
+                <description>MIDI Learned from 2 messages.</description>
+                <status>0x9''' + str(ch - 1) +  '''</status>
+                <midino>''' + hex(75) +  '''</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+    ''')
+
+def beatsTranslateCurpos(ch):
+    return('''
+            <control>
+                <group>[Channel''' + str(ch) +  ''']</group>
+                <key>beats_translate_curpos</key>
+                <description>MIDI Learned from 10 messages.</description>
+                <status>0x9''' + str(ch - 1) +  '''</status>
+                <midino>''' + hex(66) +  '''</midino>
                 <options>
                     <normal/>
                 </options>
@@ -311,13 +434,20 @@ if __name__ == "__main__":
     executeBlockForAllChannel(beatSyncButton)
     xmlComment("HeadphoneListen Button")
     executeBlockForAllChannel(headphoneListenButton)
+    xmlComment("Quantize Button")
+    executeBlockForAllChannel(quantizeButton)
         
-    xmlComment("Position Rotary Encoder - beat jump backward")
-    executeBlockForAllChannel(beatJumpBackward)
-    xmlComment("Position Rotary Encoder - beat jump forward")
-    executeBlockForAllChannel(beatJumpForward)
-    xmlComment("Position Rotary Encoder - toggle loop")
+    xmlComment("Position Knob - beat jump backward")
+    executeBlockForAllChannel(beatJumpBackwardSmaller)
+    xmlComment("Position Knob - beat jump forward")
+    executeBlockForAllChannel(beatJumpForwardSmaller)
+    xmlComment("Position Knob - toggle loop")
     executeBlockForAllChannel(reloopToggle)
+    xmlComment("Position Knob - temporary decrease tempo")
+    executeBlockForAllChannel(rateTempDownSmall)
+    
+    xmlComment("Loop & Position Knob - sync beatgrid with cur position")
+    executeBlockForAllChannel(syncBeatGridWithCurPosition)
 
     xmlComment("Loop Rotary Encoder - halve loop")
     executeBlockForAllChannel(loopHalve)
@@ -325,7 +455,13 @@ if __name__ == "__main__":
     executeBlockForAllChannel(loopDouble)
     xmlComment("Loop Rotary Encoder - loop activate")
     executeBlockForAllChannel(loopActivate)
-    
+    xmlComment("Loop Knob - beat jump backward")
+    executeBlockForAllChannel(beatJumpBackwardSmall)
+    xmlComment("Loop Knob - beat jump forward")
+    executeBlockForAllChannel(beatJumpForwardSmall)
+    xmlComment("Position Knob - temporary increase tempo")
+    executeBlockForAllChannel(rateTempUpSmall)
+
     xmlComment("Volume Rotary Encoder - Rate")
     executeBlockForAllChannel(volumeRate)
     xmlComment("Loop Rotary Encoder - Kill")

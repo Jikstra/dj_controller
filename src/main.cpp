@@ -46,17 +46,33 @@ const int count_counting_rotary_encoders = sizeof(counting_rotary_encoders) / si
 // L R  R O T A R Y  E N C O D E R S
 LRRotaryEncoder lr_rotary_encoders[] = {
   // DECK A
-  {   2,   3,   4,  31,  32, 33, 33, DECK_B },
-  {   5,   6,   7,  36,  37, 38, 38, DECK_B },
   {  11,  12,  13,  39,  40, 41, 42, DECK_B },
 
   // DECK B
-  {  22,  24,  26,  31,  32, 33, 33, DECK_A },
-  {  23,  25,  27,  36,  37, 38, 38, DECK_A },
   {  29,  31,  33,  39,  40, 41, 42, DECK_A },
 };
 
 const int count_lr_rotary_encoders = sizeof(lr_rotary_encoders) / sizeof(LRRotaryEncoder);
+
+PositionKnob position_knobs[] = {
+  // DECK B
+  { 22, 24, 26, DECK_A },
+
+  // DECK A
+  {  2,  3,  4, DECK_B },
+};
+
+const int count_position_knobs = sizeof(position_knobs) / sizeof(PositionKnob);
+
+LoopKnob loop_knobs[] = {
+  // DECK B
+  {  23,  25,  27, DECK_A },
+
+  // DECK A
+  {   5,   6,   7, DECK_B },
+};
+
+const int count_loop_knobs = sizeof(loop_knobs) / sizeof(LoopKnob);
 
 // M A T R I X
 int matrix_col_a = A6;
@@ -140,6 +156,36 @@ void loopLRRotaryEncoders() {
   }
 }
 
+void setupPositionKnobs() {
+  for(int i = 0; i < count_position_knobs; i++) {
+    PositionKnob* currKnob = &position_knobs[i];
+    currKnob->setup();
+  }
+}
+
+void loopPositionKnobs() {
+  for(int i = 0; i < count_position_knobs; i++) {
+    PositionKnob* currKnob = &position_knobs[i];
+
+    currKnob->process();
+  }
+}
+
+void setupLoopKnobs() {
+  for(int i = 0; i < count_loop_knobs; i++) {
+    LoopKnob* currKnob = &loop_knobs[i];
+    currKnob->setup();
+  }
+}
+
+void loopLoopKnobs() {
+  for(int i = 0; i < count_loop_knobs; i++) {
+    LoopKnob* currKnob = &loop_knobs[i];
+
+    currKnob->process();
+  }
+}
+
 void setupMatrix() { 
   Matrix::setupRow(matrix_row_1);
   Matrix::setupRow(matrix_row_2);
@@ -178,15 +224,15 @@ void loopMatrixChannelSwitches() {
     setChannelForDeck(DECK_B, 4);
   }
 
-  int step_size_is_one = Matrix::digitalReadRow(matrix_row_3);
-  int step_size_is_four = Matrix::digitalReadRow(matrix_row_4);
+  int step_size_is_top = Matrix::digitalReadRow(matrix_row_3);
+  int step_size_is_bottom = Matrix::digitalReadRow(matrix_row_4);
 
-  if(step_size_is_one) {
+  if(step_size_is_top) {
     setStepSize(1);
-  } else if(step_size_is_four) {
-    setStepSize(4);
+  } else if(step_size_is_bottom) {
+    setStepSize(8);
   } else {
-    setStepSize(2);
+    setStepSize(4);
   }
 }
 
@@ -221,6 +267,8 @@ void setup()
   setupCountingRotaryEncoders();
   setupLRRotaryEncoders();
   setupMatrix();
+  setupPositionKnobs();
+  setupLoopKnobs();
 
 }
 
@@ -231,5 +279,6 @@ void loop()
   loopCountingRotaryEncoders();
   loopLRRotaryEncoders();
   loopMatrix();
-  
+  loopPositionKnobs(); 
+  loopLoopKnobs(); 
 }
