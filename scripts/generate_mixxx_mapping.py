@@ -73,7 +73,7 @@ def beatJumpForward(ch):
                 <key>beatjump_forward</key>
                 <description>MIDI Learned from 2 messages.</description>
                 <status>0xB''' + str(ch - 1) +  '''</status>
-                <midino>0x1F</midino>
+                <midino>''' + hex(32) + '''</midino>
                 <options>
                     <selectknob/>
                 </options>
@@ -87,7 +87,7 @@ def beatJumpBackward(ch):
                 <key>beatjump_backward</key>
                 <description>MIDI Learned from 6 messages.</description>
                 <status>0xB''' + str(ch - 1) +  '''</status>
-                <midino>0x20</midino>
+                <midino>''' + hex(31) + '''</midino>
                 <options>
                     <selectknob/>
                 </options>
@@ -437,10 +437,14 @@ if __name__ == "__main__":
     xmlComment("Quantize Button")
     executeBlockForAllChannel(quantizeButton)
         
-    xmlComment("Position Knob - beat jump backward")
+    xmlComment("Position Knob - beatmatch - beat jump backward smaller")
     executeBlockForAllChannel(beatJumpBackwardSmaller)
-    xmlComment("Position Knob - beat jump forward")
+    xmlComment("Position Knob - beatmatch - beat jump forward smaller")
     executeBlockForAllChannel(beatJumpForwardSmaller)
+    xmlComment("Position Knob - beat jump backward")
+    executeBlockForAllChannel(beatJumpBackward)
+    xmlComment("Position Knob - beat jump forward")
+    executeBlockForAllChannel(beatJumpForward)
     xmlComment("Position Knob - toggle loop")
     executeBlockForAllChannel(reloopToggle)
     xmlComment("Position Knob - temporary decrease tempo")
@@ -455,9 +459,9 @@ if __name__ == "__main__":
     executeBlockForAllChannel(loopDouble)
     xmlComment("Loop Rotary Encoder - loop activate")
     executeBlockForAllChannel(loopActivate)
-    xmlComment("Loop Knob - beat jump backward")
+    xmlComment("Loop Knob - beatmatch - beat jump backward small")
     executeBlockForAllChannel(beatJumpBackwardSmall)
-    xmlComment("Loop Knob - beat jump forward")
+    xmlComment("Loop Knob - beatmatch - beat jump forward small")
     executeBlockForAllChannel(beatJumpForwardSmall)
     xmlComment("Position Knob - temporary increase tempo")
     executeBlockForAllChannel(rateTempUpSmall)
