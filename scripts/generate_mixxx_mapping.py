@@ -67,48 +67,41 @@ def quantizeButton(ch):
     ''')
 
 def beatJumpForward(ch):
-    return('''
+    s = ''
+    for i in [[1, 81], [4, 83], [8, 85]]:
+        s += '''
             <control>
                 <group>[Channel''' + str(ch) +  ''']</group>
-                <key>beatjump_forward</key>
+                <key>beatjump_''' + str(i[0]) + '''_forward</key>
                 <description>MIDI Learned from 2 messages.</description>
                 <status>0xB''' + str(ch - 1) +  '''</status>
-                <midino>''' + hex(32) + '''</midino>
+                <midino>''' + hex(i[1]) + '''</midino>
                 <options>
                     <selectknob/>
                 </options>
             </control>
-    ''')
+            '''
+    return s
 
 def beatJumpBackward(ch):
-    return('''
+    s = ''
+    for i in [[1, 82], [4, 84], [8, 86]]:
+        s = s + '''
             <control>
                 <group>[Channel''' + str(ch) +  ''']</group>
-                <key>beatjump_backward</key>
-                <description>MIDI Learned from 6 messages.</description>
-                <status>0xB''' + str(ch - 1) +  '''</status>
-                <midino>''' + hex(31) + '''</midino>
-                <options>
-                    <selectknob/>
-                </options>
-            </control>
-    ''')
-
-def beatJumpForwardSmaller(ch):
-    return('''
-            <control>
-                <group>[Channel''' + str(ch) +  ''']</group>
-                <key>beatjump_0.0625_forward</key>
+                <key>beatjump_''' + str(i[0]) + '''_backward</key>
                 <description>MIDI Learned from 2 messages.</description>
                 <status>0xB''' + str(ch - 1) +  '''</status>
-                <midino>''' + hex(67) + '''</midino>
+                <midino>''' + hex(i[1]) + '''</midino>
                 <options>
                     <selectknob/>
                 </options>
             </control>
-    ''')
+            '''
+    return s
+
 def beatJumpForwardSmall(ch):
-    return('''
+    return ('''
             <control>
                 <group>[Channel''' + str(ch) +  ''']</group>
                 <key>beatjump_0.125_forward</key>
@@ -119,35 +112,21 @@ def beatJumpForwardSmall(ch):
                     <selectknob/>
                 </options>
             </control>
-    ''')
-
-def beatJumpBackwardSmaller(ch):
-    return('''
-            <control>
-                <group>[Channel''' + str(ch) +  ''']</group>
-                <key>beatjump_0.0625_backward</key>
-                <description>MIDI Learned from 6 messages.</description>
-                <status>0xB''' + str(ch - 1) +  '''</status>
-                <midino>''' + hex(68) + '''</midino>
-                <options>
-                    <selectknob/>
-                </options>
-            </control>
-    ''')
+            ''')
 
 def beatJumpBackwardSmall(ch):
-    return('''
+    return ('''
             <control>
                 <group>[Channel''' + str(ch) +  ''']</group>
                 <key>beatjump_0.125_backward</key>
-                <description>MIDI Learned from 6 messages.</description>
+                <description>MIDI Learned from 2 messages.</description>
                 <status>0xB''' + str(ch - 1) +  '''</status>
                 <midino>''' + hex(78) + '''</midino>
                 <options>
                     <selectknob/>
                 </options>
             </control>
-    ''')
+            ''')
     
 def syncBeatGridWithCurPosition(ch):
     return('''
@@ -437,10 +416,6 @@ if __name__ == "__main__":
     xmlComment("Quantize Button")
     executeBlockForAllChannel(quantizeButton)
         
-    xmlComment("Position Knob - beatmatch - beat jump backward smaller")
-    executeBlockForAllChannel(beatJumpBackwardSmaller)
-    xmlComment("Position Knob - beatmatch - beat jump forward smaller")
-    executeBlockForAllChannel(beatJumpForwardSmaller)
     xmlComment("Position Knob - beat jump backward")
     executeBlockForAllChannel(beatJumpBackward)
     xmlComment("Position Knob - beat jump forward")

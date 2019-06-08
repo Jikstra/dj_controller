@@ -13,8 +13,12 @@ class PositionKnob : public RotaryEncoder {
     
     bool deck;
 
-    const int midi_beatjump_forward = 31;
-    const int midi_beatjump_backward = 32;
+    const int midi_beatjump_forward_1 = 81;
+    const int midi_beatjump_backward_1 = 82;
+    const int midi_beatjump_forward_2 = 83;
+    const int midi_beatjump_backward_2 = 84;
+    const int midi_beatjump_forward_3 = 85;
+    const int midi_beatjump_backward_3 = 86;
     const int midi_reloop_toggle = 33;
     const int midi_rate_temp_down_small = 65;
     const int midi_beats_translate_curpos = 66;

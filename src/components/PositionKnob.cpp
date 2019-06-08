@@ -11,20 +11,25 @@ PositionKnob::PositionKnob
     deck(deck) {}
 
 void PositionKnob::handleRotaryTurn(bool turnedLeft) {
+  turnedLeft = !turnedLeft;
   int channel = getChannelFromDeck(deck);
 
-  bool beatmatch_mode = getStepSize() == 1;
+  int step_size = getStepSize();
   
   int midi_control;
 
-  if(beatmatch_mode == false) {
+  if(step_size == 1) {
     midi_control = turnedLeft ?
-      midi_beatjump_backward :
-      midi_beatjump_forward;
+      midi_beatjump_backward_1 :
+      midi_beatjump_forward_1;
+  } else if(step_size == 4) {
+    midi_control = turnedLeft ?
+      midi_beatjump_backward_2 :
+      midi_beatjump_forward_2;
   } else {
     midi_control = turnedLeft ?
-      midi_beatjump_backward_smaller :
-      midi_beatjump_forward_smaller;
+      midi_beatjump_backward_3 :
+      midi_beatjump_forward_3;
   }
   
   IFNDEBUG(
@@ -37,7 +42,7 @@ void PositionKnob::handleRotaryTurn(bool turnedLeft) {
   );
 
   IFDEBUG(
-    p("PositionKnob: %i:%i %i %s", midi_control, channel, 1, turnedLeft ? "Left": "Right");  
+    p("PositionKnob [%i]: %i:%i %i %s", step_size, midi_control, channel, 1, turnedLeft ? "Left": "Right");  
   );
 }
 

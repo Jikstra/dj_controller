@@ -11,6 +11,7 @@ LoopKnob::LoopKnob
     deck(deck) {}
 
 void LoopKnob::handleRotaryTurn(bool turnedLeft) {
+  turnedLeft = !turnedLeft;
   int channel = getChannelFromDeck(deck);
 
   bool beatmatch_mode = getStepSize() == 1;
