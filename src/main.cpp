@@ -14,10 +14,10 @@ int BENCH_MAX_TOTAL = 0;
 // V O L U M E   C O U N T I N G  R O T A R Y  E N C O D E R S
 VolumeCountingRotaryEncoder volume_counting_rotary_encoders[] = {
   // DECK A
-  { 8,   9,  10,  5,  6, DECK_B },
+  {  32,   30,    28,  5,  6, DECK_A },
   
   // DECK B
-  { 28,  30,  32,  5,  6, DECK_A }
+  { A11,  A12,  A13,  5,  6, DECK_B }
 };
 
 const int count_volume_counting_rotary_encoders = sizeof(volume_counting_rotary_encoders) / sizeof(VolumeCountingRotaryEncoder);
@@ -25,20 +25,20 @@ const int count_volume_counting_rotary_encoders = sizeof(volume_counting_rotary_
 // C O U N T I N G  R O T A R Y  E N C O D E R S
 CountingRotaryEncoder counting_rotary_encoders[] = {
   // DECK A
-  {  A0,  A1,  A2,  9, 10, DECK_B },
-  {  A3,  A4,  A5, 11, 12, DECK_B },
-  {  A8,  A9, A10, 13, 14, DECK_B },
-  { A11, A12, A13, 15, 16, DECK_B },
-  {  14,  15,  16, 17, 18, DECK_B },
-  {  17,  18,  19, 19, 20, DECK_B },
+  {  17,  18,  19,  13, 14, DECK_A }, // High
+  {  26,  24,  22, 11, 12, DECK_A }, // Mid
+  {  27,  25,  23, 9, 10, DECK_A }, // Low
+  {  13,  12,  11, 19, 20, DECK_A }, // Fx3
+  {  10,   9,   8, 17, 18, DECK_A }, // Fx2
+  {   7,   6,   5, 15, 16, DECK_A }, // Fx1
   
   // DECK B
-  {  34,  36,  38,  9, 10, DECK_A },
-  {  35,  37,  39, 11, 12, DECK_A },
-  {  40,  42,  44, 13, 14, DECK_A },
-  {  41,  43,  45, 15, 16, DECK_A },
-  {  46,  48,  50, 17, 18, DECK_A },
-  {  47,  49,  51, 19, 20, DECK_A }
+  {  A0,  A1,  A2,  13, 14, DECK_B }, // High
+  {  A3,  A4,  A5, 11, 12, DECK_B }, // Mid
+  {  A8,  A9,  A10, 9, 10, DECK_B }, // Low
+  {  41,  39,  37, 19, 20, DECK_B }, // Fx3
+  {  40,  38,  36, 17, 18, DECK_B }, // Fx2
+  {  47,  45,  43, 15, 16, DECK_B } // Fx1
 };
 
 const int count_counting_rotary_encoders = sizeof(counting_rotary_encoders) / sizeof(CountingRotaryEncoder);
@@ -46,59 +46,59 @@ const int count_counting_rotary_encoders = sizeof(counting_rotary_encoders) / si
 // L R  R O T A R Y  E N C O D E R S
 LRRotaryEncoder lr_rotary_encoders[] = {
   // DECK A
-  {  11,  12,  13,  39,  40, 41, 42, DECK_B },
+  {   4,   3,   2,  39,  40, 41, 42, DECK_A }, // BPM
 
   // DECK B
-  {  29,  31,  33,  39,  40, 41, 42, DECK_A },
+  {  46,  44,  42,  39,  40, 41, 42, DECK_B }, // BPM
 };
 
 const int count_lr_rotary_encoders = sizeof(lr_rotary_encoders) / sizeof(LRRotaryEncoder);
 
 PositionKnob position_knobs[] = {
-  // DECK B
-  { 22, 24, 26, DECK_A },
-
   // DECK A
-  {  2,  3,  4, DECK_B },
+  { 33, 31, 29, DECK_A },
+
+  // DECK B
+  { 52, 50, 48, DECK_B },
 };
 
 const int count_position_knobs = sizeof(position_knobs) / sizeof(PositionKnob);
 
 LoopKnob loop_knobs[] = {
-  // DECK B
-  {  23,  25,  27, DECK_A },
-
   // DECK A
-  {   5,   6,   7, DECK_B },
+  { 14,  15, 16, DECK_A },
+
+  // DECK B
+  { 53, 51, 49, DECK_B },
 };
 
 const int count_loop_knobs = sizeof(loop_knobs) / sizeof(LoopKnob);
 
 // M A T R I X
-int matrix_col_a = A6;
-int matrix_col_b = A7;
-int matrix_col_c = A14;
-int matrix_col_d = A15;
+int matrix_row_1 = A6;
+int matrix_row_2 = A7;
+int matrix_row_3 = A14;
+int matrix_row_4 = A15;
 
-int matrix_row_1 = 20;
-int matrix_row_2 = 21;
-int matrix_row_3 = 52;
-int matrix_row_4 = 53;
+int matrix_col_a = 20;
+int matrix_col_b = 21;
+int matrix_col_c = 34;
+int matrix_col_d = 35;
 
 Button matrix_buttons_col_a[] = {
-  { matrix_row_1, 50, DECK_B },
-  { matrix_row_2, 51, DECK_B },
-  { matrix_row_3, 52, DECK_B },
-  { matrix_row_4, 53, DECK_B }
+  { matrix_col_a, 50, DECK_A },
+  { matrix_col_b, 51, DECK_A },
+  { matrix_col_c, 52, DECK_A },
+  { matrix_col_a, 53, DECK_A }
 };
 
 const int count_matrix_buttons_col_a = sizeof(matrix_buttons_col_a) / sizeof(Button);
 
 Button matrix_buttons_col_b[] = {
-  { matrix_row_1, 50, DECK_A },
-  { matrix_row_2, 51, DECK_A },
-  { matrix_row_3, 52, DECK_A },
-  { matrix_row_4, 53, DECK_A }
+  { matrix_col_a, 50, DECK_B },
+  { matrix_col_b, 51, DECK_B },
+  { matrix_col_c, 52, DECK_B },
+  { matrix_col_b, 53, DECK_B }
 };
 
 const int count_matrix_buttons_col_b = sizeof(matrix_buttons_col_b) / sizeof(Button);
@@ -198,17 +198,17 @@ void setupMatrix() {
 }
 
 void loopMatrixButtons(Button buttons[], int count) {
-  for(int i=0; i<count; i++) {
+  for(int i=0; i<count-1; i++) {
     Button* curButton = &buttons[i];
 
-    int curButtonState = Matrix::digitalReadRow(curButton->pin);
+    int curButtonState = Matrix::digitalReadCol(curButton->pin);
 
     curButton->_process(curButtonState);
   }  
 }
 
 void loopMatrixChannelSwitches() {
-  int deck_a_is_first = Matrix::digitalReadRow(matrix_row_1);
+  int deck_a_is_first = Matrix::digitalReadCol(matrix_col_c);
   
   if(deck_a_is_first) {
     setChannelForDeck(DECK_A, 1);
@@ -216,16 +216,9 @@ void loopMatrixChannelSwitches() {
     setChannelForDeck(DECK_A, 3);
   }
 
-  int deck_b_is_first = Matrix::digitalReadRow(matrix_row_2);
 
-  if(deck_b_is_first) {
-    setChannelForDeck(DECK_B, 2);
-  } else {
-    setChannelForDeck(DECK_B, 4);
-  }
-
-  int step_size_is_top = Matrix::digitalReadRow(matrix_row_3);
-  int step_size_is_bottom = Matrix::digitalReadRow(matrix_row_4);
+  int step_size_is_top = Matrix::digitalReadCol(matrix_col_a);
+  int step_size_is_bottom = Matrix::digitalReadCol(matrix_col_b);
 
   if(step_size_is_top) {
     setStepSize(1);
@@ -236,21 +229,46 @@ void loopMatrixChannelSwitches() {
   }
 }
 
-void loopMatrix() {
-  int curCol = matrix_col_a;
-  Matrix::startCol(curCol);
-  loopMatrixButtons(matrix_buttons_col_a, count_matrix_buttons_col_a);
-  Matrix::endCol(curCol);
+void loopMatrixHotfix() {
 
-  curCol = matrix_col_b;
-  Matrix::startCol(curCol);
+  Button* curButton = &matrix_buttons_col_a[3];
+  int curButtonState = Matrix::digitalReadCol(curButton->pin);
+  curButton->_process(curButtonState);
+
+  curButton = &matrix_buttons_col_b[3];
+  curButtonState = Matrix::digitalReadCol(curButton->pin);
+  curButton->_process(curButtonState);
+
+  int deck_b_is_first = Matrix::digitalReadCol(matrix_col_c);
+
+  if(deck_b_is_first) {
+    setChannelForDeck(DECK_B, 2);
+  } else {
+    setChannelForDeck(DECK_B, 4);
+  }
+}
+
+void loopMatrix() {
+  int curRow = matrix_row_1;
+  Matrix::startRow(curRow);
+  loopMatrixButtons(matrix_buttons_col_a, count_matrix_buttons_col_a);
+  Matrix::endRow(curRow);
+
+  curRow = matrix_row_2;
+  Matrix::startRow(curRow);
   loopMatrixButtons(matrix_buttons_col_b, count_matrix_buttons_col_b);
-  Matrix::endCol(curCol);
+  Matrix::endRow(curRow);
   
-  curCol = matrix_col_c;
-  Matrix::startCol(curCol);
+  curRow = matrix_row_3;
+  Matrix::startRow(curRow);
   loopMatrixChannelSwitches();
-  Matrix::endCol(curCol);
+  Matrix::endRow(curRow);
+
+  curRow = matrix_row_4;
+  Matrix::startRow(curRow);
+  loopMatrixHotfix();
+
+  Matrix::endRow(curRow);
 }
 
 

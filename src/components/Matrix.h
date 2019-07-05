@@ -6,9 +6,9 @@ namespace Matrix
 {
   void setupCol(int pin);
   void setupRow(int pin);
-  void startCol(int pin);
-  void endCol(int pin);
-  int digitalReadRow(int curRow);
+  void startRow(int pin);
+  void endRow(int pin);
+  int digitalReadCol(int pin);
 }
 
 #endif

@@ -34,7 +34,7 @@ void LRRotaryEncoder::handleRotaryTurn(bool turnedLeft) {
   );
 
   IFDEBUG(
-    p("PositionLoop: %i:%i %i %s", control_number, channel, 1, turnedLeft ? "Left": "Right");  
+    p("LRRotaryEncoder (BPM): %i:%i %i %s", control_number, channel, 1, turnedLeft ? "Left": "Right");  
   );
 }
 
