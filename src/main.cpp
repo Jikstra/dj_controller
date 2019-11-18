@@ -30,16 +30,17 @@ CountingRotaryEncoder counting_rotary_encoders[] = {
   {  27,  25,  23, 9, 10, DECK_A }, // Low
   {  13,  12,  11, 19, 20, DECK_A }, // Fx3
   {  10,   9,   8, 17, 18, DECK_A }, // Fx2
-  {   7,   6,   5, 15, 16, DECK_A }, // Fx1
+//  {   7,   6,   5, 15, 16, DECK_A }, // Fx1
   
   // DECK B
-  {  A0,  A1,  A2,  13, 14, DECK_B }, // High
-  {  A3,  A4,  A5, 11, 12, DECK_B }, // Mid
-  {  A8,  A9,  A10, 9, 10, DECK_B }, // Low
+  {   5,   6,   7,  13, 14, DECK_B }, // High
+  {  A3,  A4,  A5,  11, 12, DECK_B }, // Mid
+  {  A8,  A9,  A10,  9, 10, DECK_B }, // Low
   {  41,  39,  37, 19, 20, DECK_B }, // Fx3
   {  40,  38,  36, 17, 18, DECK_B }, // Fx2
-  {  47,  45,  43, 15, 16, DECK_B } // Fx1
+//  {  47,  45,  43, 15, 16, DECK_B } // Fx1
 };
+
 
 const int count_counting_rotary_encoders = sizeof(counting_rotary_encoders) / sizeof(CountingRotaryEncoder);
 
@@ -73,6 +74,15 @@ LoopKnob loop_knobs[] = {
 };
 
 const int count_loop_knobs = sizeof(loop_knobs) / sizeof(LoopKnob);
+
+// Poti Deck B: a=A1 d=47
+// Poti Deck B: a=A2 d=45
+Potentiometer potentiometers[] = {
+  { A1, 47, DECK_A },
+  //{ A2, 45, DECK_B }
+};
+
+const int count_potentiometers = sizeof(potentiometers) / sizeof(Potentiometer);
 
 // M A T R I X
 int matrix_row_1 = A6;
@@ -186,6 +196,22 @@ void loopLoopKnobs() {
   }
 }
 
+void setupPotentiometers() {
+  for(int i = 0; i < count_potentiometers; i++) {
+    Potentiometer* currPotentiometer = &potentiometers[i];
+
+    currPotentiometer->setup();
+  }
+}
+
+void loopPotentiometers() {
+  for(int i = 0; i < count_potentiometers; i++) {
+    Potentiometer* currPotentiometer = &potentiometers[i];
+
+    currPotentiometer->process();
+  }
+}
+
 void setupMatrix() { 
   Matrix::setupRow(matrix_row_1);
   Matrix::setupRow(matrix_row_2);
@@ -264,11 +290,10 @@ void loopMatrix() {
   loopMatrixChannelSwitches();
   Matrix::endRow(curRow);
 
-  curRow = matrix_row_4;
+  /*curRow = matrix_row_4;
   Matrix::startRow(curRow);
   loopMatrixHotfix();
-
-  Matrix::endRow(curRow);
+  Matrix::endRow(curRow);*/
 }
 
 
@@ -287,7 +312,7 @@ void setup()
   setupMatrix();
   setupPositionKnobs();
   setupLoopKnobs();
-
+  setupPotentiometers();
 }
 
 
@@ -299,4 +324,5 @@ void loop()
   loopMatrix();
   loopPositionKnobs(); 
   loopLoopKnobs(); 
+  loopPotentiometers();
 }
