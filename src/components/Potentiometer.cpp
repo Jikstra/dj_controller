@@ -7,7 +7,7 @@ Potentiometer::Potentiometer(int pin_potentiometer, int pin_button, bool deck) :
   toggle {false, false},
   pin_potentiometer(pin_potentiometer),
   pin_button(pin_button),
-  potentiometer_midi_value(0),
+  potentiometer_midi_value(-1),
   potentiometer_value_ema(0) {}
 
 
@@ -56,10 +56,20 @@ void Potentiometer::_process_potentiometer(int pin_button_value) {
   int channel = getChannelFromDeck(deck);
   int channelIndex = getUpperOrLowerChannelIndex(channel);
 
+
   IFDEBUG(p(
-    "Potentiometer Potentiometer: %i %i %i",
+    "Potentiometer Rotation: %i %i %i",
     channel,
     midi_value,
     pin_button_value
   ));
+
+  IFNDEBUG(
+    // send a MIDI CC -- 56 = note, 127 = velocity, 1 = channel
+    midiOut.sendControlChange(
+      15,
+      potentiometer_midi_value,
+      channel
+    )
+  );
 }

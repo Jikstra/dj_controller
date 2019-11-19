@@ -79,7 +79,7 @@ const int count_loop_knobs = sizeof(loop_knobs) / sizeof(LoopKnob);
 // Poti Deck B: a=A2 d=45
 Potentiometer potentiometers[] = {
   { A1, 47, DECK_A },
-  //{ A2, 45, DECK_B }
+  { A2, 45, DECK_B }
 };
 
 const int count_potentiometers = sizeof(potentiometers) / sizeof(Potentiometer);
