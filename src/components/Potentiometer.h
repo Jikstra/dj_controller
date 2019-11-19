@@ -9,9 +9,9 @@ const float EMA_ALPHA = 0.8;
 
 class Potentiometer {
   const bool deck;
-  unsigned long last_flake[2];
-  bool was_pressed[2];
-  bool toggle[2];
+  unsigned long last_flake;
+  bool was_pressed;
+  bool toggle;
   public:
     int pin_potentiometer;
     int pin_button;

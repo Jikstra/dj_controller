@@ -2,9 +2,9 @@
 
 Potentiometer::Potentiometer(int pin_potentiometer, int pin_button, bool deck) :
   deck(deck),
-  last_flake {0, 0},
-  was_pressed {false, false},
-  toggle {false, false},
+  last_flake(0),
+  was_pressed(false),
+  toggle(false),
   pin_potentiometer(pin_potentiometer),
   pin_button(pin_button),
   potentiometer_midi_value(-1),
@@ -14,6 +14,8 @@ Potentiometer::Potentiometer(int pin_potentiometer, int pin_button, bool deck) :
 void Potentiometer::setup() {
   pinMode(pin_button, INPUT_PULLUP);
   potentiometer_value_ema = analogRead(pin_potentiometer);
+
+  IFDEBUG(p(deck ? "true" : "false")); 
 }
 
 void Potentiometer::process() {
@@ -27,10 +29,9 @@ void Potentiometer::process() {
 
 void Potentiometer::_process_button(int pin_button_value) {
   int channel = getChannelFromDeck(deck);
-  int channelIndex = getUpperOrLowerChannelIndex(channel);
-  ButtonState button_state = buttonState(pin_button_value, &was_pressed[channelIndex], &last_flake[channelIndex]);
+  ButtonState button_state = buttonState(pin_button_value, &was_pressed, &last_flake);
 
-  if(!buttonToggle(button_state, &toggle[channelIndex])) {
+  if(!buttonToggle(button_state, &toggle)) {
     return;
   }
 
@@ -54,8 +55,6 @@ void Potentiometer::_process_potentiometer(int pin_button_value) {
   potentiometer_midi_value = midi_value;
 
   int channel = getChannelFromDeck(deck);
-  int channelIndex = getUpperOrLowerChannelIndex(channel);
-
 
   IFDEBUG(p(
     "Potentiometer Rotation: %i %i %i",
