@@ -8,13 +8,12 @@ Potentiometer::Potentiometer(int pin_potentiometer, int pin_button, bool deck) :
   pin_potentiometer(pin_potentiometer),
   pin_button(pin_button),
   potentiometer_midi_value(0),
-  EMA_a(0.8),
-  EMA_S(0) {}
+  potentiometer_value_ema(0) {}
 
 
 void Potentiometer::setup() {
   pinMode(pin_button, INPUT_PULLUP);
-  EMA_S = analogRead(pin_potentiometer);
+  potentiometer_value_ema = analogRead(pin_potentiometer);
 }
 
 void Potentiometer::process() {
@@ -22,8 +21,8 @@ void Potentiometer::process() {
   _process_button(pin_button_value);
 
   int sensorValue = analogRead(pin_potentiometer); 
-  EMA_S = (EMA_a*sensorValue) + ((1-EMA_a)*EMA_S);
-  _process_potentiometer(EMA_S);
+  potentiometer_value_ema = (EMA_ALPHA*sensorValue) + ((1-EMA_ALPHA)*potentiometer_value_ema);
+  _process_potentiometer(potentiometer_value_ema);
 }
 
 void Potentiometer::_process_button(int pin_button_value) {

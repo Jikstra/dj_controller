@@ -5,6 +5,8 @@
 #include "../midi.h"
 #include "../debug.h"
 
+const float EMA_ALPHA = 0.8;
+
 class Potentiometer {
   const bool deck;
   unsigned long last_flake[2];
@@ -14,8 +16,7 @@ class Potentiometer {
     int pin_potentiometer;
     int pin_button;
     int potentiometer_midi_value;
-    float EMA_a;
-    int EMA_S;
+    int potentiometer_value_ema;
 
     Potentiometer(int pin_potentiometer, int pin_button, bool deck);
     void setup();
