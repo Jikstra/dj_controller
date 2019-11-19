@@ -1,13 +1,14 @@
 #ifndef POTENTIOMETER_H
 #define POTENTIOMETER_H
 #include <Arduino.h>
+#include "./Component.h"
 #include "../common.h"
 #include "../midi.h"
 #include "../debug.h"
 
 const float EMA_ALPHA = 0.8;
 
-class Potentiometer {
+class Potentiometer : public Component {
   const bool deck;
   unsigned long last_flake;
   bool was_pressed;

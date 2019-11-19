@@ -3,9 +3,10 @@
 #include <Arduino.h>
 #include <Rotary.h>
 
+#include "./Component.h"
 #include "common.h"
 
-class RotaryEncoder {
+class RotaryEncoder : public Component {
 
   public:
     Rotary rotary;
