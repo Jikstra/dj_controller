@@ -290,10 +290,10 @@ void loopMatrix() {
   loopMatrixChannelSwitches();
   Matrix::endRow(curRow);
 
-  /*curRow = matrix_row_4;
+  curRow = matrix_row_4;
   Matrix::startRow(curRow);
   loopMatrixHotfix();
-  Matrix::endRow(curRow);*/
+  Matrix::endRow(curRow);
 }
 
 

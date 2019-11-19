@@ -7,20 +7,23 @@ Potentiometer::Potentiometer(int pin_potentiometer, int pin_button, bool deck) :
   toggle {false, false},
   pin_potentiometer(pin_potentiometer),
   pin_button(pin_button),
-  potentiometer_midi_value(0) {}
+  potentiometer_midi_value(0),
+  EMA_a(0.8),
+  EMA_S(0) {}
 
 
 void Potentiometer::setup() {
   pinMode(pin_button, INPUT_PULLUP);
+  EMA_S = analogRead(pin_potentiometer);
 }
 
 void Potentiometer::process() {
   int pin_button_value = digitalRead(pin_button);
   _process_button(pin_button_value);
 
-  return;
-  int pin_potentiometer_value = analogRead(pin_potentiometer);
-  _process_potentiometer(pin_potentiometer_value);
+  int sensorValue = analogRead(pin_potentiometer); 
+  EMA_S = (EMA_a*sensorValue) + ((1-EMA_a)*EMA_S);
+  _process_potentiometer(EMA_S);
 }
 
 void Potentiometer::_process_button(int pin_button_value) {
@@ -55,8 +58,9 @@ void Potentiometer::_process_potentiometer(int pin_button_value) {
   int channelIndex = getUpperOrLowerChannelIndex(channel);
 
   IFDEBUG(p(
-    "Potentiometer Potentiometer: %i %i",
+    "Potentiometer Potentiometer: %i %i %i",
     channel,
-    midi_value
+    midi_value,
+    pin_button_value
   ));
 }

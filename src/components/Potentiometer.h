@@ -14,6 +14,8 @@ class Potentiometer {
     int pin_potentiometer;
     int pin_button;
     int potentiometer_midi_value;
+    float EMA_a;
+    int EMA_S;
 
     Potentiometer(int pin_potentiometer, int pin_button, bool deck);
     void setup();
