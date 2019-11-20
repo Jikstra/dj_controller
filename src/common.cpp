@@ -84,7 +84,7 @@ char* buttonStateToString(ButtonState button_state) {
 }
 
 bool buttonToggle(ButtonState button_state, bool* toggle) {
-  if(button_state == ButtonState::Pressed) {
+  if(button_state == ButtonState::Unpressed) {
     *toggle = !*toggle;
     return true;
   }
@@ -101,12 +101,43 @@ unsigned int getStepSize() {
   return step_size;
 }
 
-Component* _PRESSED_COMPONENT = NULL;
+Component* _PRESSED_COMPONENTS[10] = { NULL };
+int _COUNT_PRESSED_COMPONENTS = 10;
+
 void addPressedComponent(Component* component) {
-  _PRESSED_COMPONENT = component;
+  for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
+    if (_PRESSED_COMPONENTS[i] == NULL || i == _COUNT_PRESSED_COMPONENTS-1) {
+      _PRESSED_COMPONENTS[i] = component;
+      break;
+    }
+  }
+  debugPressedComponents();
+}
+void removePressedComponent(Component* component) {
+  for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
+    if (_PRESSED_COMPONENTS[i] == component) {
+      _PRESSED_COMPONENTS[i] = NULL;
+      break;
+    }
+  }
+  debugPressedComponents();
 }
 
-Component* getPressedComponent() {
-  return _PRESSED_COMPONENT;
+Component** getPressedComponents() {
+  return _PRESSED_COMPONENTS;
 }
-    
+
+
+void debugPressedComponents() {
+  IFDEBUG(
+    p("PRESSED COMPONENTS [%i]:", _COUNT_PRESSED_COMPONENTS);
+    for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
+      if (_PRESSED_COMPONENTS[i] == NULL) {
+        p("[%i] NULL", i);
+      } else {
+        p("[%i] %i", i, _PRESSED_COMPONENTS[i]);
+      }
+    }
+  );
+  
+}

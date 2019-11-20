@@ -83,25 +83,8 @@ void CountingRotaryEncoder::handleButtonState(ButtonState button_state) {
   if (button_state == ButtonState::Pressed) {
     addPressedComponent(this);
   } else if (button_state == ButtonState::Unpressed) {
-
+    removePressedComponent(this);
   }
-  IFDEBUG(
-    p("CountingRotaryEncoder ButtonState: %s", buttonStateToString(button_state))
-  );
-  if(buttonToggle(button_state, &button_toggle)) {
-    handleButtonToggle(button_toggle);    
-  }
-}
-
-void CountingRotaryEncoder::handleButtonToggle(bool toggle) {
-  int channel = getChannelFromDeck(deck);
-  int value_to_send = toggle;
-
-  IFDEBUG(
-    p("CountingRotaryEncoder Button: %i:%i %s %i", control_number_mute, channel, toggle ? "Toggled" : "Untoggled", value_to_send)
-  );
-
-  IFNDEBUG(midiOut.sendNoteOn(control_number_mute, value_to_send, channel));
 }
 
 void CountingRotaryEncoder::onPotentiometerChange(int midiValue) {

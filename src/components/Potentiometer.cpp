@@ -52,9 +52,12 @@ void Potentiometer::_process_potentiometer(int pin_button_value) {
   potentiometer_midi_value = midi_value;
 
 
-  Component* pressedComponent = getPressedComponent();
-  if (pressedComponent != NULL) {
-    pressedComponent->onPotentiometerChange(potentiometer_midi_value);
+  Component** pressedComponents = getPressedComponents();
+  for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
+    if (_PRESSED_COMPONENTS[i] == NULL) {
+      break;
+    }
+    pressedComponents[i]->onPotentiometerChange(potentiometer_midi_value);
   }
 
   IFDEBUG(p(
