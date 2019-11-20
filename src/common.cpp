@@ -100,3 +100,13 @@ void setStepSize(unsigned int new_step_size) {
 unsigned int getStepSize() {
   return step_size;
 }
+
+Component* _PRESSED_COMPONENT = NULL;
+void addPressedComponent(Component* component) {
+  _PRESSED_COMPONENT = component;
+}
+
+Component* getPressedComponent() {
+  return _PRESSED_COMPONENT;
+}
+    

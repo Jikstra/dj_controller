@@ -1,7 +1,7 @@
 #include "Potentiometer.h"
 
-Potentiometer::Potentiometer(int pin_potentiometer, int pin_button, bool deck) :
-  deck(deck),
+Potentiometer::Potentiometer(int pin_potentiometer, int pin_button, unsigned short int id) :
+  id(id),
   last_flake(0),
   was_pressed(false),
   toggle(false),
@@ -14,8 +14,6 @@ Potentiometer::Potentiometer(int pin_potentiometer, int pin_button, bool deck) :
 void Potentiometer::setup() {
   pinMode(pin_button, INPUT_PULLUP);
   potentiometer_value_ema = analogRead(pin_potentiometer);
-
-  IFDEBUG(p(deck ? "true" : "false")); 
 }
 
 void Potentiometer::process() {
@@ -28,7 +26,6 @@ void Potentiometer::process() {
 }
 
 void Potentiometer::_process_button(int pin_button_value) {
-  int channel = getChannelFromDeck(deck);
   ButtonState button_state = buttonState(pin_button_value, &was_pressed, &last_flake);
 
   if(!buttonToggle(button_state, &toggle)) {
@@ -39,7 +36,7 @@ void Potentiometer::_process_button(int pin_button_value) {
 
   IFDEBUG(p(
     "Potentiometer Button: %i %s %i",
-    channel,
+    id,
     toggle ? "Toggled" : "Untoggled",
     value_to_send
   ));
@@ -54,21 +51,16 @@ void Potentiometer::_process_potentiometer(int pin_button_value) {
 
   potentiometer_midi_value = midi_value;
 
-  int channel = getChannelFromDeck(deck);
+
+  Component* pressedComponent = getPressedComponent();
+  if (pressedComponent != NULL) {
+    pressedComponent->onPotentiometerChange(potentiometer_midi_value);
+  }
 
   IFDEBUG(p(
     "Potentiometer Rotation: %i %i %i",
-    channel,
+    id,
     midi_value,
     pin_button_value
   ));
-
-  IFNDEBUG(
-    // send a MIDI CC -- 56 = note, 127 = velocity, 1 = channel
-    midiOut.sendControlChange(
-      15,
-      potentiometer_midi_value,
-      channel
-    )
-  );
 }

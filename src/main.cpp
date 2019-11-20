@@ -20,13 +20,11 @@ Component* components[] = {
   new CountingRotaryEncoder(27,  25,  23,  9, 10, DECK_A), // Low
   new CountingRotaryEncoder(13,  12,  11, 19, 20, DECK_A), // Fx3
   new CountingRotaryEncoder(10,   9,   8, 17, 18, DECK_A), // Fx2
-//new CountingRotaryEncoder( 7,   6,   5, 15, 16, DECK_A), // Fx1
   new CountingRotaryEncoder( 5,   6,   7, 13, 14, DECK_B), // High
   new CountingRotaryEncoder(A3,  A4,  A5, 11, 12, DECK_B), // Mid
   new CountingRotaryEncoder(A8,  A9,  A10, 9, 10, DECK_B), // Low
   new CountingRotaryEncoder(41,  39,  37, 19, 20, DECK_B), // Fx3
   new CountingRotaryEncoder(40,  38,  36, 17, 18, DECK_B), // Fx2
-//new CountingRotaryEncoder(47,  45,  43, 15, 16, DECK_B), // Fx1
 
   new PositionKnob(33, 31, 29, DECK_A),
   new PositionKnob(52, 50, 48, DECK_B),
@@ -37,8 +35,8 @@ Component* components[] = {
   new LRRotaryEncoder( 4,   3,   2,  39,  40, 41, 42, DECK_A), // BPM
   new LRRotaryEncoder(46,  44,  42,  39,  40, 41, 42, DECK_B), // BPM
 
-  new Potentiometer(A1, 47, DECK_A),
-  new Potentiometer(A2, 45, DECK_B)
+  new Potentiometer(A2, 45, 0),
+  new Potentiometer(A1, 47, 1)
 };
 
 const int count_components = sizeof(components) / sizeof(Component);

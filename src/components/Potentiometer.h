@@ -9,7 +9,7 @@
 const float EMA_ALPHA = 0.8;
 
 class Potentiometer : public Component {
-  const bool deck;
+  unsigned short int id;
   unsigned long last_flake;
   bool was_pressed;
   bool toggle;
@@ -19,7 +19,7 @@ class Potentiometer : public Component {
     int potentiometer_midi_value;
     int potentiometer_value_ema;
 
-    Potentiometer(int pin_potentiometer, int pin_button, bool deck);
+    Potentiometer(int pin_potentiometer, int pin_button, unsigned short int id);
     void setup();
     void process();
     void _process_button(int pin_button_value);
