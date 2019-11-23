@@ -21,6 +21,7 @@ void Button::process() {
 void Button::_process(int pin_value) {
   int channel = getChannelFromDeck(deck);
   int channelIndex = getUpperOrLowerChannelIndex(channel);
+
   ButtonState button_state = buttonState(pin_value, &was_pressed[channelIndex], &last_flake[channelIndex]);
 
   if(!buttonToggle(button_state, &toggle[channelIndex])) {

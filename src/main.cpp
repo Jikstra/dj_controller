@@ -11,68 +11,35 @@ int BENCH_MAX_TOTAL = 0;
  * START PIN LAYOUT
  *************/
 
-// V O L U M E   C O U N T I N G  R O T A R Y  E N C O D E R S
-VolumeCountingRotaryEncoder volume_counting_rotary_encoders[] = {
-  // DECK A
-  {  32,   30,    28,  5,  6, DECK_A },
-  
-  // DECK B
-  { A11,  A12,  A13,  5,  6, DECK_B }
+Component* components[] = {
+  new VolumeCountingRotaryEncoder(32,   30,    28,  5,  6, DECK_A),
+  new VolumeCountingRotaryEncoder(A11,  A12,  A13,  5,  6, DECK_B),
+
+  new CountingRotaryEncoder(17,  18,  19, 13, 14, DECK_A), // High
+  new CountingRotaryEncoder(26,  24,  22, 11, 12, DECK_A), // Mid
+  new CountingRotaryEncoder(27,  25,  23,  9, 10, DECK_A), // Low
+  new CountingRotaryEncoder(13,  12,  11, 19, 20, DECK_A), // Fx3
+  new CountingRotaryEncoder(10,   9,   8, 17, 18, DECK_A), // Fx2
+  new CountingRotaryEncoder( 5,   6,   7, 13, 14, DECK_B), // High
+  new CountingRotaryEncoder(A3,  A4,  A5, 11, 12, DECK_B), // Mid
+  new CountingRotaryEncoder(A8,  A9,  A10, 9, 10, DECK_B), // Low
+  new CountingRotaryEncoder(41,  39,  37, 19, 20, DECK_B), // Fx3
+  new CountingRotaryEncoder(40,  38,  36, 17, 18, DECK_B), // Fx2
+
+  new PositionKnob(33, 31, 29, DECK_A),
+  new PositionKnob(52, 50, 48, DECK_B),
+
+  new LoopKnob(14, 15, 16, DECK_A),
+  new LoopKnob(53, 51, 49, DECK_B),
+
+  new LRRotaryEncoder( 4,   3,   2,  39,  40, 41, 42, DECK_A), // BPM
+  new LRRotaryEncoder(46,  44,  42,  39,  40, 41, 42, DECK_B), // BPM
+
+  new Potentiometer(A2, 45, 0),
+  new Potentiometer(A1, 47, 1)
 };
 
-const int count_volume_counting_rotary_encoders = sizeof(volume_counting_rotary_encoders) / sizeof(VolumeCountingRotaryEncoder);
-
-// C O U N T I N G  R O T A R Y  E N C O D E R S
-CountingRotaryEncoder counting_rotary_encoders[] = {
-  // DECK A
-  {  17,  18,  19,  13, 14, DECK_A }, // High
-  {  26,  24,  22, 11, 12, DECK_A }, // Mid
-  {  27,  25,  23, 9, 10, DECK_A }, // Low
-  {  13,  12,  11, 19, 20, DECK_A }, // Fx3
-  {  10,   9,   8, 17, 18, DECK_A }, // Fx2
-  {   7,   6,   5, 15, 16, DECK_A }, // Fx1
-  
-  // DECK B
-  {  A0,  A1,  A2,  13, 14, DECK_B }, // High
-  {  A3,  A4,  A5, 11, 12, DECK_B }, // Mid
-  {  A8,  A9,  A10, 9, 10, DECK_B }, // Low
-  {  41,  39,  37, 19, 20, DECK_B }, // Fx3
-  {  40,  38,  36, 17, 18, DECK_B }, // Fx2
-  {  47,  45,  43, 15, 16, DECK_B } // Fx1
-};
-
-const int count_counting_rotary_encoders = sizeof(counting_rotary_encoders) / sizeof(CountingRotaryEncoder);
-
-// L R  R O T A R Y  E N C O D E R S
-LRRotaryEncoder lr_rotary_encoders[] = {
-  // DECK A
-  {   4,   3,   2,  39,  40, 41, 42, DECK_A }, // BPM
-
-  // DECK B
-  {  46,  44,  42,  39,  40, 41, 42, DECK_B }, // BPM
-};
-
-const int count_lr_rotary_encoders = sizeof(lr_rotary_encoders) / sizeof(LRRotaryEncoder);
-
-PositionKnob position_knobs[] = {
-  // DECK A
-  { 33, 31, 29, DECK_A },
-
-  // DECK B
-  { 52, 50, 48, DECK_B },
-};
-
-const int count_position_knobs = sizeof(position_knobs) / sizeof(PositionKnob);
-
-LoopKnob loop_knobs[] = {
-  // DECK A
-  { 14,  15, 16, DECK_A },
-
-  // DECK B
-  { 53, 51, 49, DECK_B },
-};
-
-const int count_loop_knobs = sizeof(loop_knobs) / sizeof(LoopKnob);
+const int count_components = sizeof(components) / sizeof(Component);
 
 // M A T R I X
 int matrix_row_1 = A6;
@@ -108,81 +75,19 @@ const int count_matrix_buttons_col_b = sizeof(matrix_buttons_col_b) / sizeof(But
  * END PIN LAYOUT
  *************/
 
+void setupComponents() {
+  for(int i = 0; i < count_components; i++) {
+    Component* currComponent = components[i];
 
-void setupVolumeCountingRotaryEncoders() {
-  for(int i = 0; i < count_volume_counting_rotary_encoders; i++) {
-    // Rotation
-    VolumeCountingRotaryEncoder* volume_roti = &volume_counting_rotary_encoders[i];
-    volume_roti->setup();
+    currComponent->setup();
   }
 }
 
-void loopVolumeCountingRotaryEncoders() {
-  for(int i = 0; i < count_volume_counting_rotary_encoders; i++) {
-    // Rotation
-    VolumeCountingRotaryEncoder* volume_roti = &volume_counting_rotary_encoders[i];
-    volume_roti->process();
-  }
-}
+void loopComponents() {
+  for(int i = 0; i < count_components; i++) {
+    Component* currComponent = components[i];
 
-void setupCountingRotaryEncoders() {
-  for(int i = 0; i < count_counting_rotary_encoders; i++) {
-    // Rotation
-    CountingRotaryEncoder* knob = &counting_rotary_encoders[i];
-    knob->setup();
-  }
-}
-
-void loopCountingRotaryEncoders() {
-  for(int i = 0; i < count_counting_rotary_encoders; i++) {
-    // Rotation
-    //p("test1 %i", i);
-    CountingRotaryEncoder* knob = &counting_rotary_encoders[i];
-    knob->process();
-  }
-}
-
-void setupLRRotaryEncoders() {
-  for(int i = 0; i < count_lr_rotary_encoders; i++) {
-    LRRotaryEncoder* currKnob = &lr_rotary_encoders[i];
-    currKnob->setup();
-  }
-}
-
-void loopLRRotaryEncoders() {
-  for(int i = 0; i < count_lr_rotary_encoders; i++) {
-    LRRotaryEncoder* currKnob = &lr_rotary_encoders[i];
-    currKnob->process();
-  }
-}
-
-void setupPositionKnobs() {
-  for(int i = 0; i < count_position_knobs; i++) {
-    PositionKnob* currKnob = &position_knobs[i];
-    currKnob->setup();
-  }
-}
-
-void loopPositionKnobs() {
-  for(int i = 0; i < count_position_knobs; i++) {
-    PositionKnob* currKnob = &position_knobs[i];
-
-    currKnob->process();
-  }
-}
-
-void setupLoopKnobs() {
-  for(int i = 0; i < count_loop_knobs; i++) {
-    LoopKnob* currKnob = &loop_knobs[i];
-    currKnob->setup();
-  }
-}
-
-void loopLoopKnobs() {
-  for(int i = 0; i < count_loop_knobs; i++) {
-    LoopKnob* currKnob = &loop_knobs[i];
-
-    currKnob->process();
+    currComponent->process();
   }
 }
 
@@ -267,7 +172,6 @@ void loopMatrix() {
   curRow = matrix_row_4;
   Matrix::startRow(curRow);
   loopMatrixHotfix();
-
   Matrix::endRow(curRow);
 }
 
@@ -281,22 +185,13 @@ void setup()
 {
   Serial.begin(115200);
 
-  setupVolumeCountingRotaryEncoders();
-  setupCountingRotaryEncoders();
-  setupLRRotaryEncoders();
   setupMatrix();
-  setupPositionKnobs();
-  setupLoopKnobs();
-
+  setupComponents();
 }
 
 
 void loop()
 {
-  loopVolumeCountingRotaryEncoders();
-  loopCountingRotaryEncoders();
-  loopLRRotaryEncoders();
   loopMatrix();
-  loopPositionKnobs(); 
-  loopLoopKnobs(); 
+  loopComponents();
 }
