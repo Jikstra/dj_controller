@@ -28,39 +28,18 @@ void Potentiometer::process() {
 void Potentiometer::_process_button(int pin_button_value) {
   ButtonState button_state = buttonState(pin_button_value, &was_pressed, &last_flake);
 
-  if (button_state == ButtonState::Unchanged) {
-    return;
-  }
-  IFDEBUG(p("Potentiometer Button State", buttonStateToString(button_state))); 
-
   if (button_state != ButtonState::Unpressed) {
     return;
   }
-  
-
-  IFDEBUG(p("Potentiometer Button Released"));
-  for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
-    if(_PRESSED_COMPONENTS[i] == NULL) continue;
-    _PRESSED_COMPONENTS[i]->process();
-  }
-
-  debugPressedComponents();
-
-  if (_PRESSED_COMPONENTS[0] == NULL) {
-    IFDEBUG(p("Potentiometer: No Button pressed, clearing"));
-    for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
-      linked_components[i] = NULL;
-      _PRESSED_COMPONENTS[i] = NULL;
-    }
-    return;
-  }
-
 
   for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
     linked_components[i] = _PRESSED_COMPONENTS[i];
   }
-  IFDEBUG(p("Linked Components:"));
-  _debugPressedComponents(linked_components);
+
+  IFDEBUG(
+    p("Linked Components:");
+    _debugPressedComponents(linked_components);
+  );
   
 }
 
