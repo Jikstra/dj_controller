@@ -33,8 +33,10 @@ class CountingRotaryEncoder : public RotaryEncoder {
       int initial_count
     );
     void handleRotaryTurn(bool turnedLeft);
-    void handleButtonToggle(bool toggle);
+    void handleButtonState(ButtonState button_state);
+    void setCounter(int channel, int channelIndex, int counterValue);
     int _getValueToSend(int counter);
+    void onPotentiometerChange(int midiValue);
 };
 
 #endif

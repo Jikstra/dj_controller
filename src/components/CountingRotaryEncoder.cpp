@@ -56,30 +56,44 @@ void CountingRotaryEncoder::handleRotaryTurn(bool turnedLeft) {
   int counter = rotary_counter[channelIndex];
   counter = turnedLeft ? counter - step_size : counter + step_size;
 
-  int value_to_send = _getValueToSend(counter);
-  rotary_counter[channelIndex] = value_to_send;
+  int counterValue = _getValueToSend(counter);
+  setCounter(channel, channelIndex, counterValue);
+}
+
+void CountingRotaryEncoder::setCounter(int channel, int channelIndex, int counterValue) {
+  rotary_counter[channelIndex] = counterValue;
   
   IFDEBUG(
-    p("Rotation: %i:%i %i", control_number_value, channel, value_to_send);  
+    p("Rotation: %i:%i %i", control_number_value, channel, counterValue);  
   );
   IFNDEBUG(
     // send a MIDI CC -- 56 = note, 127 = velocity, 1 = channel
     midiOut.sendControlChange(
       control_number_value,
-      value_to_send,
+      counterValue,
       channel
     )
   );
+
 }
 
-void CountingRotaryEncoder::handleButtonToggle(bool toggle) {
+void CountingRotaryEncoder::handleButtonState(ButtonState button_state) {
+  if (button_state == ButtonState::Unchanged) return;
+
+  if (button_state == ButtonState::Pressed) {
+    addPressedComponent(this);
+  } else if (button_state == ButtonState::Unpressed) {
+    removePressedComponent(this);
+  }
+}
+
+void CountingRotaryEncoder::onPotentiometerChange(int midiValue) {
   int channel = getChannelFromDeck(deck);
-  int value_to_send = toggle;
+  int channelIndex = getUpperOrLowerChannelIndex(channel);
 
+  rotary_counter[channelIndex] = midiValue;
   IFDEBUG(
-    p("Button: %i:%i %s %i", control_number_mute, channel, toggle ? "Toggled" : "Untoggled", value_to_send)
+    p("CountingRotaryEncoder onPotentiometerChange: %i %i", control_number_value, midiValue)
   );
-
-  IFNDEBUG(midiOut.sendNoteOn(control_number_mute, value_to_send, channel));
+  setCounter(channel, channelIndex, midiValue);
 }
-

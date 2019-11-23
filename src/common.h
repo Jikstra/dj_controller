@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "debug.h"
+#include "components/Component.h"
 
 const bool DECK_A = 0;
 const bool DECK_B = 1;
@@ -31,5 +32,14 @@ bool buttonToggle(ButtonState buttonState, bool* toggle);
 
 void setStepSize(unsigned int new_step_size);
 unsigned int getStepSize();
+
+extern Component* _PRESSED_COMPONENTS[10];
+extern int _COUNT_PRESSED_COMPONENTS;
+
+void addPressedComponent(Component* component);
+void removePressedComponent(Component* component);
+Component** getPressedComponents();
+void debugPressedComponents();
+void _debugPressedComponents(Component** components);
 
 #endif

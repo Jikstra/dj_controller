@@ -1,7 +1,7 @@
 #include "common.h"
 
-int channel_deck_a = 0;
-int channel_deck_b = 0;
+int channel_deck_a = 1;
+int channel_deck_b = 3;
 
 unsigned int step_size = 1;
 
@@ -17,9 +17,8 @@ void p(char *fmt, ... ){
 int getChannelFromDeck(bool deck) {
   if(deck == DECK_A) {
     return channel_deck_a;
-  } else {
-    return channel_deck_b;
   }
+  return channel_deck_b;
 }
 
 int getUpperOrLowerChannelIndexFromDeck(bool deck) {
@@ -32,6 +31,9 @@ int getUpperOrLowerChannelIndex(int channel) {
     return 0;
   } else if(channel == 3 || channel == 4) {
     return 1;
+  } else {
+    IFDEBUG(p("getUpperOrLowerChannelIndex(): Invalid channel id passed"));
+    return 0;
   }
 }
 
@@ -84,7 +86,7 @@ char* buttonStateToString(ButtonState button_state) {
 }
 
 bool buttonToggle(ButtonState button_state, bool* toggle) {
-  if(button_state == ButtonState::Pressed) {
+  if(button_state == ButtonState::Unpressed) {
     *toggle = !*toggle;
     return true;
   }
@@ -99,4 +101,47 @@ void setStepSize(unsigned int new_step_size) {
 
 unsigned int getStepSize() {
   return step_size;
+}
+
+Component* _PRESSED_COMPONENTS[10] = { NULL };
+int _COUNT_PRESSED_COMPONENTS = 10;
+
+void addPressedComponent(Component* component) {
+  for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
+    if (_PRESSED_COMPONENTS[i] == NULL || i == _COUNT_PRESSED_COMPONENTS-1) {
+      _PRESSED_COMPONENTS[i] = component;
+      break;
+    }
+  }
+  debugPressedComponents();
+}
+void removePressedComponent(Component* component) {
+  for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
+    if (_PRESSED_COMPONENTS[i] == component) {
+      _PRESSED_COMPONENTS[i] = NULL;
+      break;
+    }
+  }
+  debugPressedComponents();
+}
+
+Component** getPressedComponents() {
+  return _PRESSED_COMPONENTS;
+}
+
+
+void _debugPressedComponents(Component** components) {
+  IFDEBUG(
+    p("PRESSED COMPONENTS [%i]:", _COUNT_PRESSED_COMPONENTS);
+    for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
+      if (components[i] == NULL) {
+        p("[%i] NULL", i);
+      } else {
+        p("[%i] %i", i, components[i]);
+      }
+    }
+  );
+}
+void debugPressedComponents() {
+  _debugPressedComponents(_PRESSED_COMPONENTS);
 }
