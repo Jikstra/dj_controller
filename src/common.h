@@ -40,5 +40,6 @@ void addPressedComponent(Component* component);
 void removePressedComponent(Component* component);
 Component** getPressedComponents();
 void debugPressedComponents();
+void _debugPressedComponents(Component** components);
 
 #endif

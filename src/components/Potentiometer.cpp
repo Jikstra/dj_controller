@@ -28,18 +28,19 @@ void Potentiometer::process() {
 void Potentiometer::_process_button(int pin_button_value) {
   ButtonState button_state = buttonState(pin_button_value, &was_pressed, &last_flake);
 
-  if(!buttonToggle(button_state, &toggle)) {
+  if (button_state != ButtonState::Unpressed) {
     return;
   }
 
-  int value_to_send = 1;
+  IFDEBUG(p("Potentiometer Button Released"));
 
-  IFDEBUG(p(
-    "Potentiometer Button: %i %s %i",
-    id,
-    toggle ? "Toggled" : "Untoggled",
-    value_to_send
-  ));
+  debugPressedComponents();
+  for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
+    linked_components[i] = _PRESSED_COMPONENTS[i];
+  }
+  IFDEBUG(p("Linked Components:"));
+  _debugPressedComponents(linked_components);
+  
 }
 
 void Potentiometer::_process_potentiometer(int pin_button_value) {
@@ -50,20 +51,28 @@ void Potentiometer::_process_potentiometer(int pin_button_value) {
   }
 
   potentiometer_midi_value = midi_value;
-
-
-  Component** pressedComponents = getPressedComponents();
-  for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
-    if (_PRESSED_COMPONENTS[i] == NULL) {
-      break;
-    }
-    pressedComponents[i]->onPotentiometerChange(potentiometer_midi_value);
-  }
-
   IFDEBUG(p(
     "Potentiometer Rotation: %i %i %i",
     id,
     midi_value,
     pin_button_value
   ));
+
+  if (_PRESSED_COMPONENTS[0] != NULL) {
+    Component** pressedComponents = getPressedComponents();
+    for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
+      if (_PRESSED_COMPONENTS[i] == NULL) {
+        break;
+      }
+      pressedComponents[i]->onPotentiometerChange(potentiometer_midi_value);
+    }
+
+  } else if (linked_components[0] != 0) {
+    for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
+      if (linked_components[i] == NULL) {
+        break;
+      }
+      linked_components[i]->onPotentiometerChange(potentiometer_midi_value);
+    }
+  }
 }

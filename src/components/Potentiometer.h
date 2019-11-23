@@ -9,6 +9,7 @@
 const float EMA_ALPHA = 0.8;
 
 class Potentiometer : public Component {
+  Component* linked_components[10] = { NULL };
   unsigned short int id;
   unsigned long last_flake;
   bool was_pressed;

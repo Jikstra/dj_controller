@@ -130,16 +130,18 @@ Component** getPressedComponents() {
 }
 
 
-void debugPressedComponents() {
+void _debugPressedComponents(Component** components) {
   IFDEBUG(
     p("PRESSED COMPONENTS [%i]:", _COUNT_PRESSED_COMPONENTS);
     for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
-      if (_PRESSED_COMPONENTS[i] == NULL) {
+      if (components[i] == NULL) {
         p("[%i] NULL", i);
       } else {
-        p("[%i] %i", i, _PRESSED_COMPONENTS[i]);
+        p("[%i] %i", i, components[i]);
       }
     }
   );
-  
+}
+void debugPressedComponents() {
+  _debugPressedComponents(_PRESSED_COMPONENTS);
 }
