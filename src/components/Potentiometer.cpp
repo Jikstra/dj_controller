@@ -32,14 +32,14 @@ void Potentiometer::_process_button(int pin_button_value) {
     return;
   }
 
-  IFDEBUG(p("Potentiometer Button Released"));
-
-  debugPressedComponents();
   for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
     linked_components[i] = _PRESSED_COMPONENTS[i];
   }
-  IFDEBUG(p("Linked Components:"));
-  _debugPressedComponents(linked_components);
+
+  IFDEBUG(
+    p("Linked Components:");
+    _debugPressedComponents(linked_components);
+  );
   
 }
 

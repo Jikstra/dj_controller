@@ -50,7 +50,7 @@ void setChannelForDeck(bool deck, int channel) {
 bool isBouncing(unsigned long* last_flake_millis) {
   unsigned long current_flake = millis();
   //p("current_flake %lu last_flake %lu", current_flake, *last_flake_millis);
-  bool returnValue = current_flake - *last_flake_millis < 50;
+  bool returnValue = current_flake - *last_flake_millis < 20;
   *last_flake_millis = current_flake;
   return returnValue;  
 }
