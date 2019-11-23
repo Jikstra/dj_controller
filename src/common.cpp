@@ -1,7 +1,7 @@
 #include "common.h"
 
-int channel_deck_a = 0;
-int channel_deck_b = 0;
+int channel_deck_a = 1;
+int channel_deck_b = 3;
 
 unsigned int step_size = 1;
 
@@ -17,9 +17,8 @@ void p(char *fmt, ... ){
 int getChannelFromDeck(bool deck) {
   if(deck == DECK_A) {
     return channel_deck_a;
-  } else {
-    return channel_deck_b;
   }
+  return channel_deck_b;
 }
 
 int getUpperOrLowerChannelIndexFromDeck(bool deck) {
@@ -32,6 +31,9 @@ int getUpperOrLowerChannelIndex(int channel) {
     return 0;
   } else if(channel == 3 || channel == 4) {
     return 1;
+  } else {
+    IFDEBUG(p("getUpperOrLowerChannelIndex(): Invalid channel id passed"));
+    return 0;
   }
 }
 
