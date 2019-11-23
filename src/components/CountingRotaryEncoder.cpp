@@ -80,6 +80,8 @@ void CountingRotaryEncoder::setCounter(int channel, int channelIndex, int counte
 void CountingRotaryEncoder::handleButtonState(ButtonState button_state) {
   if (button_state == ButtonState::Unchanged) return;
 
+  IFDEBUG(p("Potentiometer Button State %s", buttonStateToString(button_state))); 
+
   if (button_state == ButtonState::Pressed) {
     addPressedComponent(this);
   } else if (button_state == ButtonState::Unpressed) {
