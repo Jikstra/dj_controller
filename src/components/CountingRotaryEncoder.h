@@ -13,6 +13,7 @@ class CountingRotaryEncoder : public RotaryEncoder {
 
     int control_number_value;
     int control_number_mute;
+    bool ignore_toogle_because_of_potentiometer_action;
     
     bool deck;
     CountingRotaryEncoder(
@@ -34,9 +35,11 @@ class CountingRotaryEncoder : public RotaryEncoder {
     );
     void handleRotaryTurn(bool turnedLeft);
     void handleButtonState(ButtonState button_state);
+    void handleButtonToggle(bool toggle);
     void setCounter(int channel, int channelIndex, int counterValue);
     int _getValueToSend(int counter);
     void onPotentiometerChange(int midiValue);
+    void onPotentiometerClick();
 };
 
 #endif

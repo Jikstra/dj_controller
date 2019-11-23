@@ -28,13 +28,21 @@ void Potentiometer::process() {
 void Potentiometer::_process_button(int pin_button_value) {
   ButtonState button_state = buttonState(pin_button_value, &was_pressed, &last_flake);
 
+  IFDEBUG(
+    if (button_state != ButtonState::Unchanged) {
+      p("Potentiometer Button: %s", buttonStateToString(button_state));
+    }
+  );
+
   if (button_state != ButtonState::Unpressed) {
     return;
   }
 
-  for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
-    linked_components[i] = _PRESSED_COMPONENTS[i];
-  }
+  p("Destination: %i Source: %i Length: %i", _PRESSED_COMPONENTS, linked_components, sizeof(Component*) * 10);
+  memcpy(_PRESSED_COMPONENTS, linked_components, sizeof(Component*) * 10);
+  /*for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
+    linked_components[i]->onPotentiometerClick();
+  }*/
 
   IFDEBUG(
     p("Linked Components:");
@@ -61,7 +69,7 @@ void Potentiometer::_process_potentiometer(int pin_button_value) {
   if (_PRESSED_COMPONENTS[0] != NULL) {
     Component** pressedComponents = getPressedComponents();
     for (int i = 0; i<_COUNT_PRESSED_COMPONENTS; i++) {
-      if (_PRESSED_COMPONENTS[i] == NULL) {
+      if (*_PRESSED_COMPONENTS[i] == NULL) {
         break;
       }
       pressedComponents[i]->onPotentiometerChange(potentiometer_midi_value);

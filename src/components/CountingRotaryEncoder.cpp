@@ -14,6 +14,8 @@ CountingRotaryEncoder::CountingRotaryEncoder
    
     control_number_value(control_number_value),
     control_number_mute(control_number_mute),
+
+    ignore_toogle_because_of_potentiometer_action(false),
     
     deck(deck)
     {}
@@ -81,19 +83,45 @@ void CountingRotaryEncoder::handleButtonState(ButtonState button_state) {
   if (button_state == ButtonState::Unchanged) return;
 
   if (button_state == ButtonState::Pressed) {
+    ignore_toogle_because_of_potentiometer_action = false;
     addPressedComponent(this);
   } else if (button_state == ButtonState::Unpressed) {
     removePressedComponent(this);
+
+    if (ignore_toogle_because_of_potentiometer_action == true) return;
+    if(buttonToggle(button_state, &button_toggle)) {
+      handleButtonToggle(button_toggle);    
+    }
   }
+}
+
+
+void CountingRotaryEncoder::handleButtonToggle(bool toggle) {
+  int channel = getChannelFromDeck(deck);
+  int value_to_send = toggle;
+
+  IFDEBUG(
+    p("CountingRotaryEncoder ButtonToggle: %i:%i %s %i", control_number_mute, channel, toggle ? "Toggled" : "Untoggled", value_to_send)
+  );
+
+  IFNDEBUG(midiOut.sendNoteOn(control_number_mute, value_to_send, channel));
 }
 
 void CountingRotaryEncoder::onPotentiometerChange(int midiValue) {
   int channel = getChannelFromDeck(deck);
   int channelIndex = getUpperOrLowerChannelIndex(channel);
+  ignore_toogle_because_of_potentiometer_action = true;
 
   rotary_counter[channelIndex] = midiValue;
   IFDEBUG(
     p("CountingRotaryEncoder onPotentiometerChange: %i %i", control_number_value, midiValue)
   );
   setCounter(channel, channelIndex, midiValue);
+}
+
+void CountingRotaryEncoder::onPotentiometerClick() {
+  ignore_toogle_because_of_potentiometer_action = true;
+  IFDEBUG(
+    p("CountingRotaryEncoder onPotentiometerClick: %i", control_number_value);
+  );
 }

@@ -8,6 +8,7 @@ class Component {
     virtual void setup();
     virtual void process();
     virtual void onPotentiometerChange(int midiValue);
+    virtual void onPotentiometerClick();
 };
 
 #endif
