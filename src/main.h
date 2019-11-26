@@ -1,5 +1,4 @@
-#ifndef MAIN_H
-#define MAIN_H
+#pragma once
 
 #include "Arduino.h"
 
@@ -12,5 +11,3 @@
 #include "components/LoopKnob.h"
 #include "components/Potentiometer.h"
 #include "components/Matrix.h"
-
-#endif

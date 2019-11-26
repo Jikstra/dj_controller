@@ -1,5 +1,5 @@
-#ifndef BUTTON_H
-#define BUTTON_H
+#pragma once
+
 #include <Arduino.h>
 #include "../common.h"
 #include "../midi.h"
@@ -19,5 +19,3 @@ class Button {
     void process();
     void _process(int state);
 };
-
-#endif

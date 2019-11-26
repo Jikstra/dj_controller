@@ -1,5 +1,5 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#pragma once
+
 #include <Arduino.h>
 
 namespace Matrix
@@ -10,5 +10,3 @@ namespace Matrix
   void endRow(int pin);
   int digitalReadCol(int pin);
 }
-
-#endif

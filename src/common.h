@@ -1,5 +1,4 @@
-#ifndef COMMON_H
-#define COMMON_H
+#pragma once
 
 #include <Arduino.h>
 #include "debug.h"
@@ -41,5 +40,3 @@ void removePressedComponent(Component* component);
 Component** getPressedComponents();
 void debugPressedComponents();
 void _debugPressedComponents(Component** components);
-
-#endif

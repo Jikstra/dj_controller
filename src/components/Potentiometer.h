@@ -1,5 +1,5 @@
-#ifndef POTENTIOMETER_H
-#define POTENTIOMETER_H
+#pragma once
+
 #include <Arduino.h>
 #include "./Component.h"
 #include "../common.h"
@@ -26,5 +26,3 @@ class Potentiometer : public Component {
     void _process_button(int pin_button_value);
     void _process_potentiometer(int pin_potentiometer_value);
 };
-
-#endif

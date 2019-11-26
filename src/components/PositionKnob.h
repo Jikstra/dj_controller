@@ -1,5 +1,5 @@
-#ifndef POSITION_KNOB_H
-#define POSITION_KNOB_H
+#pragma once
+
 #include <Arduino.h>
 
 #include "../common.h"
@@ -35,5 +35,3 @@ class PositionKnob : public RotaryEncoder {
     //virtual void handleButtonToggle(bool toggle);
     virtual void handleButtonState(ButtonState buttonState);
 };
-
-#endif

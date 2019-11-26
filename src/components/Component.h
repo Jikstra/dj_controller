@@ -1,5 +1,5 @@
-#ifndef COMPONENT_H
-#define COMPONENT_H
+#pragma once
+
 #include <Arduino.h>
 
 class Component {
@@ -9,5 +9,3 @@ class Component {
     virtual void process();
     virtual void onPotentiometerChange(int midiValue);
 };
-
-#endif

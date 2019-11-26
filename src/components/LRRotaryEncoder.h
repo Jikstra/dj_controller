@@ -1,5 +1,5 @@
-#ifndef LR_ROTARY_ENCODER_H
-#define LR_ROTARY_ENCODER_H
+#pragma once
+
 #include <Arduino.h>
 
 #include "../common.h"
@@ -31,5 +31,3 @@ class LRRotaryEncoder : public RotaryEncoder {
     void handleRotaryTurn(bool turnedLeft);
     void handleButtonToggle(bool toggle);
 };
-
-#endif

@@ -1,5 +1,5 @@
-#ifndef KNOB_H
-#define KNOB_H
+#pragma once
+
 #include <Arduino.h>
 #include <Rotary.h>
 
@@ -25,5 +25,3 @@ class RotaryEncoder : public Component {
     virtual void handleButtonState(ButtonState buttonState);
     virtual void handleButtonToggle(bool toggle);
 };
-
-#endif

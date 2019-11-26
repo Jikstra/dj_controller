@@ -1,5 +1,5 @@
-#ifndef COUNTING_ROTARY_ENCODER_H
-#define COUNTING_ROTARY_ENCODER_H
+#pragma once
+
 #include <Arduino.h>
 
 #include "../common.h"
@@ -38,5 +38,3 @@ class CountingRotaryEncoder : public RotaryEncoder {
     int _getValueToSend(int counter);
     void onPotentiometerChange(int midiValue);
 };
-
-#endif

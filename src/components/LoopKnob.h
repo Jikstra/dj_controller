@@ -1,5 +1,5 @@
-#ifndef LOOP_KNOB_H
-#define LOOP_KNOB_H
+#pragma once
+
 #include <Arduino.h>
 
 #include "../common.h"
@@ -30,5 +30,3 @@ class LoopKnob : public RotaryEncoder {
     void handleRotaryTurn(bool turnedLeft);
     virtual void handleButtonState(ButtonState buttonState);
 };
-
-#endif

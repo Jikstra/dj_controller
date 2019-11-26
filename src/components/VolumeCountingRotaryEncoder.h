@@ -1,6 +1,5 @@
+#pragma once
 
-#ifndef VOLUME_COUNTING_ROTARY_ENCODER_H
-#define VOLUME_COUNTING_ROTARY_ENCODER_H
 #include <Arduino.h>
 
 #include "../common.h"
@@ -21,5 +20,3 @@ class VolumeCountingRotaryEncoder : public CountingRotaryEncoder {
     );
     void handleButtonToggle(bool toggle);
 };
-
-#endif
