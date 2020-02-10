@@ -32,8 +32,16 @@ void RotaryEncoder::processRotary() {
 void RotaryEncoder::handleRotaryTurn(bool turnedLeft) {}
 
 void RotaryEncoder::processButton() {
-  int pinValue = digitalRead(button_pin); 
+  int pinValue = !digitalRead(button_pin); 
   ButtonState button_state = buttonState(pinValue, &button_was_pressed, &button_last_flake);
+  IFDEBUG(
+    if (button_state != ButtonState::Unchanged) {
+      p(
+        "RotaryEncoder: state: %s",
+        buttonStateToString(button_state)
+      );
+    }
+  );
 
   handleButtonState(button_state);
 }

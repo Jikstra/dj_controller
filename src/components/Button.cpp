@@ -23,6 +23,16 @@ void Button::_process(int pin_value) {
   int channelIndex = getUpperOrLowerChannelIndex(channel);
 
   ButtonState button_state = buttonState(pin_value, &was_pressed[channelIndex], &last_flake[channelIndex]);
+  IFDEBUG(
+    if (button_state != ButtonState::Unchanged) {
+      p(
+        "Button: %i:%i state: %s",
+        control_number,
+        channel,
+        buttonStateToString(button_state)
+      );
+    }
+  );
 
   if(!buttonToggle(button_state, &toggle[channelIndex])) {
     return;
